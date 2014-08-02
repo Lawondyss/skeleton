@@ -5,6 +5,9 @@
 # http://nette.org/security-warning
 #
 parameters:
+  app:
+    title:
+    description:
 
 
 php:
