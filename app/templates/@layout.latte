@@ -5,8 +5,7 @@
 
   <title>{ifset #title}{include title|striptags} | {/ifset}Nette Sandbox</title>
 
-  <link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
-  <link rel="stylesheet" media="print" href="{$basePath}/css/print.css">
+  {control cssScreen}
   <link rel="shortcut icon" href="{$basePath}/favicon.ico">
   {block head}{/block}
 </head>
@@ -18,10 +17,7 @@
 
   {include content}
 
-  {block scripts}
-  <script src="{$basePath}/js/jquery.js"></script>
-  <script src="{$basePath}/js/netteForms.js"></script>
-  <script src="{$basePath}/js/main.js"></script>
-  {/block}
+  {control js}
+  {block scripts}{/block}
 </body>
 </html>

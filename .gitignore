@@ -2,6 +2,7 @@ log/*
 temp/*
 vendor/*
 !vendor/others
+webtemp/
 
 .DS_Store
 .idea

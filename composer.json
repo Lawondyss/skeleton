@@ -1,7 +1,8 @@
 {
   "require": {
     "php": ">= 5.3.7",
-    "nette/nette": "~2.2.0"
+    "nette/nette": "~2.2.0",
+    "janmarek/webloader": "dev-master"
   },
   "require-dev": {
     "nette/tester": "~1.0"

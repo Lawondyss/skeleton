@@ -9,6 +9,13 @@ parameters:
     title:
     description:
 
+  assets:
+    bootstrap:
+      css: %wwwDir%/css/bootstrap.min.css
+      js: %wwwDir%/js/bootstrap.min.js
+    jquery: %wwwDir%/js/jquery.js
+    netteForms: %wwwDir%/js/netteForms.js
+
 
 php:
   date.timezone: Europe/Prague
@@ -24,7 +31,32 @@ nette:
     expiration: 14 days
 
 
+extensions:
+    webloader: WebLoader\Nette\Extension
+
+
 services:
   - App\Model\UserManager
   - App\RouterFactory
   router: @App\RouterFactory::createRouter
+
+
+webloader:
+  css:
+    screen:
+      files:
+        - %assets.bootstrap.css%
+        - %wwwDir%/css/screen.css
+
+    print:
+      files:
+        - %assets.bootstrap.css%
+        - %wwwDir%/css/print.css
+
+  js:
+    default:
+      files:
+        - %assets.jquery%
+        - %assets.netteForms%
+        - %assets.bootstrap.js%
+        - %wwwDir%/js/main.js
