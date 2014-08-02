@@ -1,25 +1,12 @@
 <?php
 
-namespace App\Presenters;
+namespace App\AdminModule\Presenters;
 
-use Nette,
-	App\Model;
-
-
-/**
- * Sign in/out presenters.
- */
 class SignPresenter extends BasePresenter
 {
-
-
-	/**
-	 * Sign-in form factory.
-	 * @return Nette\Application\UI\Form
-	 */
 	protected function createComponentSignInForm()
 	{
-		$form = new Nette\Application\UI\Form;
+		$form = new \Nette\Application\UI\Form;
 		$form->addText('username', 'Username:')
 			->setRequired('Please enter your username.');
 
