@@ -6,8 +6,11 @@
 #
 parameters:
   app:
-    title:
-    description:
+    title: Project name
+    description: Description of project
+    keywords:
+      - project
+      - keywords
 
   assets:
     bootstrap:

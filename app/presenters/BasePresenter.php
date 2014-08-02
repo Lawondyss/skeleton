@@ -20,6 +20,27 @@ abstract class BasePresenter extends Presenter
   protected function beforeRender()
   {
     parent::beforeRender();
+
+    $this->template->title = $this->getAppParameter('title');
+    $this->template->description = $this->getAppParameter('description');
+    $this->template->keywords = implode(',', $this->getAppParameter('keywords'));
+  }
+
+
+  /**
+   * @param string $name
+   * @return mixed
+   */
+  protected function getAppParameter($name)
+  {
+    $appParameters = $this->context->parameters['app'];
+
+    if (!array_key_exists($name, $appParameters)) {
+      $msg = sprintf('Parameter "%s" not exists.', $name);
+      throw new \InvalidArgumentException($msg);
+    }
+
+    return $appParameters[$name];
   }
 
 
