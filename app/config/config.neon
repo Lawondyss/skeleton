@@ -19,6 +19,29 @@ parameters:
     jquery: %wwwDir%/js/jquery.js
     netteForms: %wwwDir%/js/netteForms.js
 
+  menu:
+    frontend:
+      -
+        link: Home:default
+        text: Home
+        icon: home
+      -
+        link: :Admin:Sign:in
+        text: Login
+        icon: lock
+        main: false
+
+    admin:
+      -
+        link: Home:default
+        text: Home
+        icon: home
+      -
+        link: Sign:out
+        text: Logout
+        icon: "off"
+        main: false
+
 
 php:
   date.timezone: Europe/Prague
@@ -42,6 +65,7 @@ services:
   - App\Model\UserManager
   - App\RouterFactory
   router: @App\RouterFactory::createRouter
+  - Lawondyss\MenuFactory
 
 
 webloader:

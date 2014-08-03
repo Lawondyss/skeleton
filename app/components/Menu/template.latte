@@ -1,0 +1,22 @@
+{**
+* @author Ladislav Vondráček
+*}
+
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  <ul class="nav navbar-nav">
+    <li n:foreach="$items as $item" n:if="$item->isMain()" n:class="$item->isCurrent() ? active">
+      <a href="{plink $item->link}">
+        <span n:ifset="$item->icon" class="glyphicon glyphicon-{$item->icon}"></span>
+        {$item->text}
+      </a>
+    </li>
+  </ul>
+  <ul class="nav navbar-nav navbar-right">
+    <li n:foreach="$items as $item" n:if="!$item->isMain()" n:class="$item->isCurrent() ? active">
+      <a href="{plink $item->link}">
+        <span n:ifset="$item->icon" class="glyphicon glyphicon-{$item->icon}"></span>
+        {$item->text}
+      </a>
+    </li>
+  </ul>
+</div>
