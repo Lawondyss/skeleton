@@ -19,6 +19,8 @@ if (is_file($localConfig = __DIR__ . '/config/config.local.neon')) {
   $configurator->addConfig($localConfig);
 }
 
+\Kdyby\Autowired\DI\AutowiredExtension::register($configurator);
+
 $container = $configurator->createContainer();
 
 return $container;

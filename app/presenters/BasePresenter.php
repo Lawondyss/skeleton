@@ -7,8 +7,8 @@ use WebLoader\Nette\CssLoader;
 
 abstract class BasePresenter extends Presenter
 {
-  /** @var \WebLoader\Nette\LoaderFactory @inject */
-  public $webloader;
+  use \Kdyby\Autowired\AutowireProperties;
+  use \Kdyby\Autowired\AutowireComponentFactories;
 
 
   protected function startup()
@@ -45,11 +45,12 @@ abstract class BasePresenter extends Presenter
 
 
   /**
+   * @param \WebLoader\Nette\LoaderFactory
    * @return \WebLoader\Nette\CssLoader
    */
-  protected function createComponentCssScreen()
+  protected function createComponentCssScreen(\WebLoader\Nette\LoaderFactory $webloader)
   {
-    $control = $this->webloader->createCssLoader('screen');
+    $control = $webloader->createCssLoader('screen');
     $control->setMedia('screen,projection,tv');
 
     return $control;
@@ -57,11 +58,12 @@ abstract class BasePresenter extends Presenter
 
 
   /**
+   * @param \WebLoader\Nette\LoaderFactory
    * @return \WebLoader\Nette\CssLoader
    */
-  protected function createComponentCssPrint()
+  protected function createComponentCssPrint(\WebLoader\Nette\LoaderFactory $webloader)
   {
-    $control = $this->webloader->createCssLoader('print');
+    $control = $webloader->createCssLoader('print');
     $control->setMedia('print');
 
     return $control;
@@ -69,11 +71,12 @@ abstract class BasePresenter extends Presenter
 
 
   /**
+   * @param \WebLoader\Nette\LoaderFactory
    * @return \WebLoader\Nette\JavaScriptLoader
    */
-  protected function createComponentJs()
+  protected function createComponentJs(\WebLoader\Nette\LoaderFactory $webloader)
   {
-    $control = $this->webloader->createJavaScriptLoader('default');
+    $control = $webloader->createJavaScriptLoader('default');
 
     return $control;
   }
