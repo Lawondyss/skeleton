@@ -2,7 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
-class HomePresenter extends BasePresenter
+class HomePresenter extends SecuredPresenter
 {
   protected function startup()
   {
