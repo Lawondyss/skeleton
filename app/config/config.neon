@@ -59,6 +59,14 @@ nette:
   session:
     expiration: 14 days
 
+  debugger:
+    email: lawondyss@gmail.com
+
+  forms:
+    messages:
+      FILLED: 'Vyplňte pole %label.'
+      EMAIL: 'Zkontrolujte správnost e-mailu.'
+
 
 extensions:
     webloader: WebLoader\Nette\Extension
