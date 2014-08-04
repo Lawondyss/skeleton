@@ -2,6 +2,7 @@
 
 namespace App\Presenters;
 
+use KdybyTests\Autowired\DummyPresenter;
 use Nette\Application\UI\Presenter;
 use WebLoader\Nette\CssLoader;
 
@@ -24,6 +25,40 @@ abstract class BasePresenter extends Presenter
     $this->template->title = $this->getAppParameter('title');
     $this->template->description = $this->getAppParameter('description');
     $this->template->keywords = implode(',', $this->getAppParameter('keywords'));
+  }
+
+
+  public function formatLayoutTemplateFiles()
+  {
+    $name = $this->getName();
+    $presenter = substr($name, strrpos(':' . $name, ':'));
+    $dir = dirname($this->getReflection()->getFileName());
+    $dir = substr($dir, 0, strlen($dir)-11);
+
+    $files = [
+      $dir . '/' . $presenter . '/@layout.latte',
+      $dir . '/@layout.latte',
+      $this->context->parameters['appDir'] . '/core/@layout.latte',
+    ];
+    return $files;
+  }
+
+
+  public function formatTemplateFiles()
+  {
+    $name = $this->getName();
+    $presenter = substr($name, strrpos(':' . $name, ':'));
+    $dir = dirname($this->getReflection()->getFileName());
+    if (is_dir($substr = substr($dir, 0, strlen($dir)-11))) {
+      $dir = $substr;
+    }
+
+    $files = [
+      $dir . '/' . $presenter . '/templates/' . $this->getView() . '.latte',
+      $dir . '/templates/' . $this->getView() . '.latte',
+    ];
+
+    return $files;
   }
 
 
