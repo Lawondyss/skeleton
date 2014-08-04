@@ -12,6 +12,13 @@ abstract class BasePresenter extends Presenter
   use \Kdyby\Autowired\AutowireComponentFactories;
 
 
+  /** @persistent */
+  public $locale;
+
+  /** @var \Kdyby\Translation\Translator @autowire */
+  protected $translator;
+
+
   protected function startup()
   {
     parent::startup();

@@ -19,26 +19,26 @@ parameters:
     jquery: %wwwDir%/js/jquery.js
     netteForms: %wwwDir%/js/netteForms.js
 
-  menu:
+  menu: # text is a key for translation
     frontend:
       -
         link: Home:default
-        text: Home
+        text: home
         icon: home
       -
         link: :Admin:Sign:in
-        text: Login
+        text: login
         icon: lock
         main: false
 
     admin:
       -
         link: Home:default
-        text: Home
+        text: home
         icon: home
       -
         link: Sign:out
-        text: Logout
+        text: logout
         icon: "off"
         main: false
 
@@ -64,12 +64,13 @@ nette:
 
   forms:
     messages:
-      FILLED: 'Vyplňte pole %label.'
-      EMAIL: 'Zkontrolujte správnost e-mailu.'
+      FILLED: fillField
+      EMAIL: checkEmail
 
 
 extensions:
     webloader: WebLoader\Nette\Extension
+    translation: Kdyby\Translation\DI\TranslationExtension
 
 
 services:
@@ -99,3 +100,6 @@ webloader:
         - %assets.netteForms%
         - %assets.bootstrap.js%
         - %wwwDir%/js/main.js
+
+translation:
+  default: cs

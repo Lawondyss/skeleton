@@ -14,7 +14,6 @@
     padding: 15px;
     margin: 0 auto;
   }
-  .form-signin .form-signin-heading,
   .form-signin .checkbox {
     margin-bottom: 10px;
   }
@@ -46,7 +45,7 @@
 </style>
 
 {form form class => 'form-signin'}
-  <div n:if="$form->hasErrors()" class="alert alert-error">
+  <div n:if="$form->hasErrors()" class="alert alert-danger">
     <div n:foreach="$form->getErrors() as $error">{$error}</div>
   </div>
 

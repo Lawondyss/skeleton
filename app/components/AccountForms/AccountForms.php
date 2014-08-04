@@ -17,9 +17,17 @@ class AccountForms extends UI\Control
   /** @var array */
   public $onSuccess = [];
 
+  /** @var \Kdyby\Translation\Translator */
+  protected $translator;
+
   /** @var string */
   private $type;
 
+
+  public function __construct(\Kdyby\Translation\Translator $translator)
+  {
+    $this->translator = $translator;
+  }
 
   /**
    * @param string
@@ -40,7 +48,7 @@ class AccountForms extends UI\Control
         $file = '/template.latte';
     }
 
-    $this->template->setFile(__DIR__ . $file);
+    $this->template->setFile(__DIR__ . '/templates' . $file);
     $this->template->render();
   }
 
@@ -52,6 +60,8 @@ class AccountForms extends UI\Control
   protected function createComponentForm()
   {
     $form = new UI\Form;
+
+    $form->setTranslator($this->translator);
 
     switch ($this->type) {
       case self::SIGNIN:
@@ -74,22 +84,22 @@ class AccountForms extends UI\Control
    */
   private function setupInFields(UI\Form $form)
   {
-    $form->addText('email', 'E-mail')
+    $form->addText('email', 'email')
       ->setType('email')
       ->setRequired()
       ->addRule($form::EMAIL)
       ->getControlPrototype()
-        ->placeholder('E-mail')
+        ->placeholder($this->translator->translate('email'))
         ->autofocus(true);
 
-    $form->addPassword('password', 'Heslo')
+    $form->addPassword('password', 'password')
       ->setRequired()
       ->getControlPrototype()
-        ->placeholder('Heslo');
+        ->placeholder($this->translator->translate('password'));
 
-    $form->addCheckbox('remember', 'Pamatovat si mě');
+    $form->addCheckbox('remember', 'remember');
 
-    $form->addSubmit('send', 'Přihlásit');
+    $form->addSubmit('send', 'login');
   }
 
 
@@ -110,7 +120,7 @@ class AccountForms extends UI\Control
       $this->onSuccess($form, $values);
     }
     catch (\Nette\Security\AuthenticationException $e) {
-      $form->addError('Chybné přihlašovací údaje.');
+      $form->addError($this->translator->translate('incorrectLogin'));
     }
   }
 }

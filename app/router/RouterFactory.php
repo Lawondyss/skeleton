@@ -22,11 +22,11 @@ class RouterFactory
     $router = new RouteList;
 
     $routerAdmin = new RouteList('Admin');
-    $routerAdmin[] = new Route('admin/<presenter>/<action>[/<id>]', 'Home:default');
+    $routerAdmin[] = new Route('[<locale=cs cs|en>/]admin/<presenter>/<action>[/<id>]', 'Home:default');
     $router[] = $routerAdmin;
 
     $routerFront = new RouteList('Front');
-    $routerFront[] = new Route('<presenter>/<action>[/<id>]', 'Home:default');
+    $routerFront[] = new Route('[<locale=cs cs|en>/]<presenter>/<action>[/<id>]', 'Home:default');
     $router[] = $routerFront;
 
     return $router;

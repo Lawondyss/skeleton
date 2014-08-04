@@ -7,7 +7,7 @@
     <li n:foreach="$items as $item" n:if="$item->isMain()" n:class="$item->isCurrent() ? active">
       <a href="{plink $item->link}">
         <span n:ifset="$item->icon" class="glyphicon glyphicon-{$item->icon}"></span>
-        {$item->text}
+        {_$item->text}
       </a>
     </li>
   </ul>
@@ -15,7 +15,7 @@
     <li n:foreach="$items as $item" n:if="!$item->isMain()" n:class="$item->isCurrent() ? active">
       <a href="{plink $item->link}">
         <span n:ifset="$item->icon" class="glyphicon glyphicon-{$item->icon}"></span>
-        {$item->text}
+        {_$item->text}
       </a>
     </li>
   </ul>
