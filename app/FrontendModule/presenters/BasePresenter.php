@@ -17,10 +17,10 @@ abstract class BasePresenter extends \App\Presenters\BasePresenter
 
 
   /**
-   * @param \MenuFactory $menuFactory
-   * @return \Menu
+   * @param \Lawondyss\MenuFactory $menuFactory
+   * @return \Lawondyss\Menu
    */
-  protected function createComponentMenu(\MenuFactory $menuFactory)
+  protected function createComponentMenu(\Lawondyss\MenuFactory $menuFactory)
   {
     $control = $menuFactory->create();
     $control->current = $this->name . ':' . $this->action;
