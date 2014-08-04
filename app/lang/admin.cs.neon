@@ -1,2 +1,5 @@
 home:
   welcome: 'Vítejte v administraci'
+
+sign:
+  login: 'Přihlášení'

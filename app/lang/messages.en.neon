@@ -1,4 +1,12 @@
 # Navigation
-Home: 'Home'
-Login: 'Login'
-Logout: 'Logout'
+home: 'Home'
+login: 'Login'
+logout: 'Logout'
+
+# Forms
+fillField: 'Fill in the %label field.'
+checkEmail: 'Check correctness of the E-mail.'
+email: 'E-mail'
+password: 'Password'
+remember: 'Remember me'
+incorrectLogin: 'Incorrect login details.'

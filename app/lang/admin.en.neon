@@ -1,2 +1,5 @@
 home:
   welcome: 'Welcome to administration'
+
+sign:
+  login: 'Login'

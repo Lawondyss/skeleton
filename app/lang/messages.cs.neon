@@ -1,4 +1,12 @@
 # Navigation
-Home: 'Hlavní stránka'
-Login: 'Přihlásit'
-Logout: 'Odhlásit'
+home: 'Hlavní stránka'
+login: 'Přihlásit'
+logout: 'Odhlásit'
+
+# Forms
+fillField: 'Vyplňte pole %label.'
+checkEmail: 'Zkontrolujte správnost e-mailu.'
+email: 'E-mail'
+password: 'Heslo'
+remember: 'Pamatovat si mě'
+incorrectLogin: Chybné přihlašovací údaje.
