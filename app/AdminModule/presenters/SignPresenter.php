@@ -4,48 +4,25 @@ namespace App\AdminModule\Presenters;
 
 class SignPresenter extends BasePresenter
 {
-	protected function createComponentSignInForm()
-	{
-		$form = new \Nette\Application\UI\Form;
-		$form->addText('username', 'Username:')
-			->setRequired('Please enter your username.');
-
-		$form->addPassword('password', 'Password:')
-			->setRequired('Please enter your password.');
-
-		$form->addCheckbox('remember', 'Keep me signed in');
-
-		$form->addSubmit('send', 'Sign in');
-
-		// call method signInFormSucceeded() on success
-		$form->onSuccess[] = $this->signInFormSucceeded;
-		return $form;
-	}
+  public function actionOut()
+  {
+    $this->user->logout(true);
+    $this->redirect(':Frontend:Home:');
+  }
 
 
-	public function signInFormSucceeded($form, $values)
-	{
-		if ($values->remember) {
-			$this->getUser()->setExpiration('14 days', FALSE);
-		} else {
-			$this->getUser()->setExpiration('20 minutes', TRUE);
-		}
+  /**
+   * @param \Lawondyss\AccountFormsFactory $accountFormsFactory
+   */
+  protected function createComponentSignInForm(\Lawondyss\AccountFormsFactory $accountFormsFactory)
+  {
+    $control = $accountFormsFactory->create();
+    $control->setType($control::SIGNIN);
 
-		try {
-			$this->getUser()->login($values->username, $values->password);
-			$this->redirect('Homepage:');
+    $control->onSuccess[] = function() {
+      $this->redirect('Home:');
+    };
 
-		} catch (Nette\Security\AuthenticationException $e) {
-			$form->addError($e->getMessage());
-		}
-	}
-
-
-	public function actionOut()
-	{
-		$this->getUser()->logout();
-		$this->flashMessage('You have been signed out.');
-		$this->redirect('in');
-	}
-
+    return $control;
+  }
 }

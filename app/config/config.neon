@@ -42,6 +42,9 @@ parameters:
         icon: "off"
         main: false
 
+  users:
+    lawondyss@gmail.com: web
+
 
 php:
   date.timezone: Europe/Prague
@@ -62,10 +65,11 @@ extensions:
 
 
 services:
-  - App\Model\UserManager
+  authenticator: Nette\Security\SimpleAuthenticator(%users%)
   - App\RouterFactory
   router: @App\RouterFactory::createRouter
   - Lawondyss\MenuFactory
+  - Lawondyss\AccountFormsFactory
 
 
 webloader:
