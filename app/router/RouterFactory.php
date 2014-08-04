@@ -25,9 +25,9 @@ class RouterFactory
     $routerAdmin[] = new Route('admin/<presenter>/<action>[/<id>]', 'Home:default');
     $router[] = $routerAdmin;
 
-    $routerFrontend = new RouteList('Frontend');
-    $routerFrontend[] = new Route('<presenter>/<action>[/<id>]', 'Home:default');
-    $router[] = $routerFrontend;
+    $routerFront = new RouteList('Front');
+    $routerFront[] = new Route('<presenter>/<action>[/<id>]', 'Home:default');
+    $router[] = $routerFront;
 
     return $router;
   }

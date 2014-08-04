@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FrontendModule\Presenters;
+namespace App\FrontModule\Presenters;
 
 abstract class BasePresenter extends \App\Presenters\BasePresenter
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FrontendModule\Presenters;
+namespace App\FrontModule\Presenters;
 
 class HomePresenter extends BasePresenter
 {
