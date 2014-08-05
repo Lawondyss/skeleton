@@ -69,8 +69,8 @@ nette:
 
 
 extensions:
-    webloader: WebLoader\Nette\Extension
-    translation: Kdyby\Translation\DI\TranslationExtension
+  webloader: WebLoader\Nette\Extension
+  translation: Kdyby\Translation\DI\TranslationExtension
 
 
 services:
