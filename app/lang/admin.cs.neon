@@ -3,3 +3,8 @@ home:
 
 sign:
   login: 'Přihlášení'
+
+users:
+  heading: 'Uživatelé'
+  email: 'E-mail'
+  role: 'Role'

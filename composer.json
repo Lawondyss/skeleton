@@ -4,7 +4,8 @@
     "nette/nette": "~2.2.0",
     "janmarek/webloader": "dev-master",
     "kdyby/autowired": "1.0.*@dev",
-    "kdyby/translation": "2.0.*@dev"
+    "kdyby/translation": "2.0.*@dev",
+    "tharos/leanmapper": "dev-master"
   },
   "require-dev": {
     "nette/tester": "~1.0"

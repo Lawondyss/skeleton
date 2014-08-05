@@ -1,5 +1,6 @@
 # Navigation
 home: 'Hlavní stránka'
+users: 'Uživatelé'
 login: 'Přihlásit'
 logout: 'Odhlásit'
 

@@ -37,6 +37,10 @@ parameters:
         text: home
         icon: home
       -
+        link: Users:default
+        text: users
+        icon: user
+      -
         link: Sign:out
         text: logout
         icon: "off"
@@ -71,9 +75,12 @@ nette:
 extensions:
   webloader: WebLoader\Nette\Extension
   translation: Kdyby\Translation\DI\TranslationExtension
+  leanmapper: LeanMapper\LeanMapperExtension
 
 
 services:
+  - App\Model\Repositories\UserRepository
+
   authenticator: Nette\Security\SimpleAuthenticator(%users%)
   - App\RouterFactory
   router: @App\RouterFactory::createRouter
@@ -101,5 +108,17 @@ webloader:
         - %assets.bootstrap.js%
         - %wwwDir%/js/main.js
 
+
 translation:
   default: cs
+
+
+leanmapper:
+  database:
+    driver: mysqli
+    host:
+    username:
+    password:
+    lazy: true
+  mapper: LeanMapper\DefaultMapper
+  entityFactory: LeanMapper\DefaultEntityFactory
