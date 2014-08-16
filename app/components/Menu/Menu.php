@@ -8,6 +8,7 @@
 namespace Lawondyss;
 
 use Nette\Application\UI;
+use \Nette\Localization\ITranslator;
 
 class Menu extends UI\Control
 {
@@ -15,15 +16,24 @@ class Menu extends UI\Control
 
   private $translator;
 
-  public $current;
+  private $current;
 
 
   /**
-   * @param \Lawondyss\Translator $translator
+   * @param \Nette\Localization\ITranslator $translator
    */
-  public function __construct(Translator $translator)
+  public function setTranslator(ITranslator $translator)
   {
     $this->translator = $translator;
+  }
+
+
+  /**
+   * @param string $current
+   */
+  public function setCurrent($current)
+  {
+    $this->current = $current;
   }
 
 

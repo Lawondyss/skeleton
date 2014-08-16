@@ -20,7 +20,7 @@ parameters:
     netteForms: %wwwDir%/js/netteForms.js
 
   menu:
-    frontend:
+    front:
       -
         link: Home:default
         text: Domů
@@ -41,7 +41,7 @@ parameters:
         text: Uživatelé
         icon: user
       -
-        link: Sign:out
+        link: :Front:Sign:out
         text: Odhlásit
         icon: "off"
         main: false

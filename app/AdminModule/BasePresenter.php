@@ -33,10 +33,11 @@ abstract class BasePresenter extends \App\Presenters\BasePresenter
   protected function createComponentMenu(\Lawondyss\MenuFactory $menuFactory)
   {
     $control = $menuFactory->create();
-    $control->current = $this->name . ':' . $this->action;
+    $control->setTranslator($this->translator);
+    $control->setCurrent($this->name . ':' . $this->action);
 
-    $menuItems = $this->context->parameters['menu'];
-    $control->setItems($menuItems['admin']);
+    $parameters = $this->context->getParameters();
+    $control->setItems($parameters['menu']['admin']);
 
     return $control;
   }
