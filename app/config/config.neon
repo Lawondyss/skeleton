@@ -22,22 +22,22 @@ parameters:
   menu:
     front:
       -
-        link: Home:default
+        link: :Front:Home:default
         text: Domů
         icon: home
       -
-        link: Sign:in
+        link: :Front:Sign:in
         text: Přihlásit
         icon: lock
         main: false
 
     admin:
       -
-        link: Home:default
+        link: :Admin:Home:default
         text: Domů
         icon: home
       -
-        link: Users:default
+        link: :Admin:Users:default
         text: Uživatelé
         icon: user
       -
