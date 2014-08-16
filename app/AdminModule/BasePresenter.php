@@ -1,4 +1,9 @@
 <?php
+/**
+ * Class BasePresenter
+ * @package App\AdminModule\Presenters
+ * @author Ladislav Vondráček
+ */
 
 namespace App\AdminModule\Presenters;
 
@@ -7,6 +12,11 @@ abstract class BasePresenter extends \App\Presenters\BasePresenter
   protected function startup()
   {
     parent::startup();
+
+    if (!$this->user->isLoggedIn()) {
+      $this->flashMessage('Musíte být přihlášeni.');
+      $this->redirect(':Front:Sign:in');
+    }
   }
 
 
@@ -30,4 +40,5 @@ abstract class BasePresenter extends \App\Presenters\BasePresenter
 
     return $control;
   }
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AdminModule\Presenters;
+namespace App\FrontModule\Presenters;
 
 class SignPresenter extends BasePresenter
 {
