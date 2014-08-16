@@ -124,4 +124,20 @@ abstract class BasePresenter extends Presenter
 
     return $control;
   }
+
+
+  /**
+   * @param \Lawondyss\MenuFactory $menuFactory
+   * @return \Lawondyss\Menu
+   */
+  protected function createComponentMenu(\Lawondyss\MenuFactory $menuFactory)
+  {
+    $control = $menuFactory->create();
+    $control->current = $this->name . ':' . $this->action;
+
+    $menuItems = $this->context->parameters['menu'];
+    $control->setItems($menuItems['frontend']);
+
+    return $control;
+  }
 }
