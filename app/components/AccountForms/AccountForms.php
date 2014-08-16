@@ -17,14 +17,14 @@ class AccountForms extends UI\Control
   /** @var array */
   public $onSuccess = [];
 
-  /** @var \Kdyby\Translation\Translator */
+  /** @var \Lawondyss\Translator */
   protected $translator;
 
   /** @var string */
   private $type;
 
 
-  public function __construct(\Kdyby\Translation\Translator $translator)
+  public function __construct(Translator $translator)
   {
     $this->translator = $translator;
   }
@@ -84,22 +84,22 @@ class AccountForms extends UI\Control
    */
   private function setupInFields(UI\Form $form)
   {
-    $form->addText('email', 'email')
+    $form->addText('email', 'E-mail')
       ->setType('email')
       ->setRequired()
       ->addRule($form::EMAIL)
       ->getControlPrototype()
-        ->placeholder($this->translator->translate('email'))
+        ->placeholder($this->translator->translate('E-mail'))
         ->autofocus(true);
 
-    $form->addPassword('password', 'password')
+    $form->addPassword('password', 'Heslo')
       ->setRequired()
       ->getControlPrototype()
-        ->placeholder($this->translator->translate('password'));
+        ->placeholder($this->translator->translate('Heslo'));
 
-    $form->addCheckbox('remember', 'remember');
+    $form->addCheckbox('remember', 'Pamatovat si mě');
 
-    $form->addSubmit('send', 'login');
+    $form->addSubmit('send', 'Přihlásit');
   }
 
 

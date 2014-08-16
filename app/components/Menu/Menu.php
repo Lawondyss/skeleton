@@ -13,7 +13,18 @@ class Menu extends UI\Control
 {
   private $items = array();
 
+  private $translator;
+
   public $current;
+
+
+  /**
+   * @param \Lawondyss\Translator $translator
+   */
+  public function __construct(Translator $translator)
+  {
+    $this->translator = $translator;
+  }
 
 
   /**
@@ -59,6 +70,7 @@ class Menu extends UI\Control
 
     $this->template->items = $this->items;
 
+    $this->template->setTranslator($this->translator);
     $this->template->setFile(__DIR__ . '/template.latte');
     $this->template->render();
   }

@@ -46,7 +46,7 @@
 
 {form form class => 'form-signin'}
   <div n:if="$form->hasErrors()" class="alert alert-danger">
-    <div n:foreach="$form->getErrors() as $error">{$error}</div>
+    <div n:foreach="$form->getErrors() as $error">{_$error}</div>
   </div>
 
   {input email class => 'form-control'}

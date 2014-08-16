@@ -6,7 +6,7 @@
   <meta n:ifset="$description" name="description" content="{$description}">
   <meta n:ifset="$keywords" name="keywords" content="{$keywords}">
 
-  <title>{ifset #title}{include title|striptags} | {/ifset}{$title}</title>
+  <title>{ifset #title}{include title|striptags} | {/ifset}{_$title}</title>
 
   {control cssScreen}
   <link rel="shortcut icon" href="{$basePath}/favicon.ico">
@@ -25,13 +25,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">{$title}</a>
+          <a class="navbar-brand" href="#">{_$title}</a>
         </div>
         {control menu}
       </div>
     </nav>
 
-    <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}" role="{$flash->type}">{$flash->message}</div>
+    <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}" role="{$flash->type}">{_$flash->message}</div>
 
     {include content}
 

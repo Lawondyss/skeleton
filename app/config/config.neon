@@ -19,30 +19,30 @@ parameters:
     jquery: %wwwDir%/js/jquery.js
     netteForms: %wwwDir%/js/netteForms.js
 
-  menu: # text is a key for translation
+  menu:
     frontend:
       -
         link: Home:default
-        text: home
+        text: Domů
         icon: home
       -
         link: :Admin:Sign:in
-        text: login
+        text: Přihlásit
         icon: lock
         main: false
 
     admin:
       -
         link: Home:default
-        text: home
+        text: Domů
         icon: home
       -
         link: Users:default
-        text: users
+        text: Uživatelé
         icon: user
       -
         link: Sign:out
-        text: logout
+        text: Odhlásit
         icon: "off"
         main: false
 
@@ -68,19 +68,19 @@ nette:
 
   forms:
     messages:
-      FILLED: fillField
-      EMAIL: checkEmail
+      FILLED: "Vyplňte pole."
+      EMAIL: "Zkontrolujte správnost e-mailu."
 
 
 extensions:
   webloader: WebLoader\Nette\Extension
-  translation: Kdyby\Translation\DI\TranslationExtension
   leanmapper: LeanMapper\LeanMapperExtension
 
 
 services:
   - App\Model\Repositories\UserRepository
 
+  translator: Lawondyss\Translator
   authenticator: Nette\Security\SimpleAuthenticator(%users%)
   - App\RouterFactory
   router: @App\RouterFactory::createRouter
@@ -107,10 +107,6 @@ webloader:
         - %assets.netteForms%
         - %assets.bootstrap.js%
         - %wwwDir%/js/main.js
-
-
-translation:
-  default: cs
 
 
 leanmapper:

@@ -15,7 +15,7 @@ abstract class BasePresenter extends Presenter
   /** @persistent */
   public $locale;
 
-  /** @var \Kdyby\Translation\Translator @autowire */
+  /** @var \Lawondyss\Translator @autowire */
   protected $translator;
 
 
@@ -28,6 +28,8 @@ abstract class BasePresenter extends Presenter
   protected function beforeRender()
   {
     parent::beforeRender();
+
+    $this->template->setTranslator($this->translator);
 
     $this->template->title = $this->getAppParameter('title');
     $this->template->description = $this->getAppParameter('description');
