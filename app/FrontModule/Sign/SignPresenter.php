@@ -20,7 +20,7 @@ class SignPresenter extends BasePresenter
     $control->setType($control::SIGNIN);
 
     $control->onSuccess[] = function() {
-      $this->redirect('Home:');
+      $this->redirect(':Admin:Home:');
     };
 
     return $control;
