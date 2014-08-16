@@ -7,7 +7,7 @@
 
 namespace App\AdminModule\Presenters;
 
-class UsersPresenter extends SecuredPresenter
+class UsersPresenter extends BasePresenter
 {
   /** @var \App\Model\Repositories\UserRepository @autowire */
   protected $userRepository;
