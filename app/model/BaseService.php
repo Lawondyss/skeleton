@@ -8,6 +8,7 @@
 namespace App\Model;
 
 use Nette\Database\Context;
+use Nette\Database\IRow;
 
 abstract class BaseService extends \Nette\Object implements Service
 {
