@@ -33,12 +33,10 @@ abstract class BaseService extends \Nette\Object implements Service
   public function getTable($tableName = null)
   {
     if (isset($tableName)) {
-      $table = $this->db->table($tableName);
+      return $this->db->table($tableName);
     }
-    elseif (isset($this->table)) {
-      $table = $this->table;
-    }
-    else {
+
+    if (!isset($this->table)) {
       $fullyClassName = get_called_class();
       // class name without namespace
       $className = substr(strrchr($fullyClassName, '\\'), 1);
@@ -58,10 +56,10 @@ abstract class BaseService extends \Nette\Object implements Service
       });
 
       $tableName = implode('_', $rel);
-      $table = $this->db->table($tableName);
+      $this->table = $this->db->table($tableName);
     }
 
-    return $table;
+    return $this->table;
   }
 
 
