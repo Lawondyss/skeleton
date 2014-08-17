@@ -11,13 +11,13 @@ interface Service
 {
   public function getTable($name = null);
 
-  public function fetch($id);
+  public function find($id);
 
-  public function fetchBy(array $conditions);
+  public function findBy(array $conditions);
 
-  public function fetchAll();
+  public function findAll();
 
-  public function fetchAllBy(array $conditions);
+  public function findAllBy(array $conditions);
 
   public function insert(\Traversable $data);
 
