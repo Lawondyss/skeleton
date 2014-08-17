@@ -49,6 +49,15 @@ parameters:
   users:
     lawondyss@gmail.com: web
 
+  database:
+    driver: mysql
+    host:
+    database:
+    user:
+    password:
+    charset: utf8
+    lazy: TRUE
+
 
 php:
   date.timezone: Europe/Prague
@@ -71,14 +80,18 @@ nette:
       FILLED: "Vyplňte pole."
       EMAIL: "Zkontrolujte správnost e-mailu."
 
+  database:
+    dsn: '%database.driver%:host=%database.host%;dbname=%database.database%'
+    user: %database.user%
+    password: %database.password%
+
 
 extensions:
   webloader: WebLoader\Nette\Extension
-  leanmapper: LeanMapper\LeanMapperExtension
 
 
 services:
-  - App\Model\Repositories\UserRepository
+  - App\Model\UserService\UserService
 
   translator: Lawondyss\Translator
   authenticator: Nette\Security\SimpleAuthenticator(%users%)
@@ -107,14 +120,3 @@ webloader:
         - %assets.netteForms%
         - %assets.bootstrap.js%
         - %wwwDir%/js/main.js
-
-
-leanmapper:
-  database:
-    driver: mysqli
-    host:
-    username:
-    password:
-    lazy: true
-  mapper: LeanMapper\DefaultMapper
-  entityFactory: LeanMapper\DefaultEntityFactory

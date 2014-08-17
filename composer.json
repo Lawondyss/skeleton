@@ -3,8 +3,7 @@
     "php": ">= 5.3.7",
     "nette/nette": "~2.2.2",
     "janmarek/webloader": "dev-master",
-    "kdyby/autowired": "1.0.*@dev",
-    "tharos/leanmapper": "dev-master"
+    "kdyby/autowired": "1.0.*@dev"
   },
   "require-dev": {
     "nette/tester": "~1.0"
