@@ -91,7 +91,7 @@ extensions:
 
 
 services:
-  - App\Model\UserService\UserService
+  - App\Model\UserService
 
   translator: Lawondyss\Translator
   authenticator: Nette\Security\SimpleAuthenticator(%users%)

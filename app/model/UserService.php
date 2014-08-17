@@ -5,11 +5,11 @@
  * @author Ladislav Vondráček
  */
 
-namespace App\Model\UserService;
-
-use App\Model\BaseService;
+namespace App\Model;
 
 class UserService extends BaseService
 {
+  const ROLE_USER = 'user';
 
+  const ROLE_ADMIN = 'admin';
 }
