@@ -9,7 +9,7 @@ namespace App\Model;
 
 use Nette\Database\Context;
 
-abstract class BaseService extends \Nette\Object
+abstract class BaseService extends \Nette\Object implements Service
 {
   private $table;
 
@@ -80,10 +80,10 @@ abstract class BaseService extends \Nette\Object
    * @param array $conditions
    * @return bool|mixed|IRow
    */
-  public function findBy($conditions)
+  public function findBy(array $conditions)
   {
-    $resutl = $this->getTable()->where($conditions)->fetch();
-    return $resutl;
+    $result = $this->getTable()->where($conditions)->fetch();
+    return $result;
   }
 
 
@@ -101,7 +101,7 @@ abstract class BaseService extends \Nette\Object
    * @param array $conditions
    * @return array|IRow[]
    */
-  public function findAllBy($conditions)
+  public function findAllBy(array $conditions)
   {
     $result = $this->getTable()->where($conditions)->fetchAll();
     return $result;
@@ -112,7 +112,7 @@ abstract class BaseService extends \Nette\Object
    * @param \Traversable $data
    * @return int ID of new record.
    */
-  public function insert($data)
+  public function insert(\Traversable $data)
   {
     $result = $this->getTable()->insert($data);
     $id = $result->getPrimary();
@@ -125,7 +125,7 @@ abstract class BaseService extends \Nette\Object
    * @param int $id
    * @return int Count of affected rows.
    */
-  public function update($data, $id)
+  public function update(\Traversable $data, $id)
   {
     $affectedRows = $this->getTable()->wherePrimary($id)->update($data);
     return $affectedRows;
