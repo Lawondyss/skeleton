@@ -1,4 +1,21 @@
-{block content}
-<h1 n:block="title">{_'Přihlášení'}</h1>
+{**
+* @author Ladislav Vondráček
+*}
 
-{control signInForm}
+{block content}
+
+<div class="row">
+  <div class="col-sm-offset-3 col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading panel-title" n:block="title">
+        {_'Přihlášení'}
+      </div>
+      <div class="panel-body">
+        {control signInForm}
+      </div>
+      <div class="panel-footer">
+        {_'Ještě nemáte účet?'} <a n:href="Sign:register">{_'Zaregistrujte se.'}
+      </div>
+    </div>
+  </div>
+</div>
