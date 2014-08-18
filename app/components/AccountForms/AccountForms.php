@@ -8,26 +8,48 @@
 namespace Lawondyss;
 
 use Nette\Application\UI;
+use Nette\Security\Passwords;
 
 class AccountForms extends UI\Control
 {
   const SIGNIN = 1;
 
+  const REGISTER = 2;
+
 
   /** @var array */
   public $onSuccess = [];
 
-  /** @var \Lawondyss\Translator */
-  protected $translator;
+  /** @var array */
+  public $onException = [];
+
+  /** @var \Nette\Localization\ITranslator */
+  private $translator;
+
+  /** @var \App\Model\Service */
+  private $userService;
 
   /** @var string */
   private $type;
 
 
-  public function __construct(Translator $translator)
+  /**
+   * @param \Nette\Localization\ITranslator $translator
+   */
+  public function setTranslator(\Nette\Localization\ITranslator $translator)
   {
     $this->translator = $translator;
   }
+
+
+  /**
+   * @param \App\Model\Service $userService
+   */
+  public function setUserService(\App\Model\Service $userService)
+  {
+    $this->userService = $userService;
+  }
+
 
   /**
    * @param string
@@ -44,11 +66,16 @@ class AccountForms extends UI\Control
       case self::SIGNIN:
         $file = '/signin.latte';
         break;
+      case self::REGISTER:
       default:
         $file = '/template.latte';
     }
 
     $this->template->setFile(__DIR__ . '/templates' . $file);
+
+    if (isset($this->translator)) {
+      $this->template->setTranslator($this->translator);
+    }
     $this->template->render();
   }
 
@@ -61,12 +88,18 @@ class AccountForms extends UI\Control
   {
     $form = new UI\Form;
 
-    $form->setTranslator($this->translator);
+    if (isset($this->translator)) {
+      $form->setTranslator($this->translator);
+    }
 
     switch ($this->type) {
       case self::SIGNIN:
-        $this->setupInFields($form);
+        $this->setupSignInFields($form);
         $callback = $this->processingSignIn;
+        break;
+      case self::REGISTER:
+        $this->setupRegisterFields($form);
+        $callback = $this->processingRegister;
         break;
       default:
         $msg = isset($this->renderType) ? 'Render type is wrong.' : 'Render type not set';
@@ -82,7 +115,7 @@ class AccountForms extends UI\Control
   /**
    * @param \Nette\Application\UI\Form
    */
-  private function setupInFields(UI\Form $form)
+  private function setupSignInFields(UI\Form $form)
   {
     $form->addText('email', 'E-mail')
       ->setType('email')
@@ -104,7 +137,8 @@ class AccountForms extends UI\Control
 
 
   /**
-   * @param \Nette\Application\UI\Form
+   * @param UI\Form $form
+   * @param \Nette\Utils\ArrayHash $values
    */
   public function processingSignIn(UI\Form $form, $values)
   {
@@ -120,7 +154,59 @@ class AccountForms extends UI\Control
       $this->onSuccess($form, $values);
     }
     catch (\Nette\Security\AuthenticationException $e) {
-      $form->addError($this->translator->translate('incorrectLogin'));
+      $form->addError('Chybné přihlášení. Zkontrolujte přihlašovací údaje.');
+    }
+  }
+
+
+  /**
+   * @param UI\Form $form
+   */
+  private function setupRegisterFields(UI\Form $form)
+  {
+    $form->addText('email', 'E-mail')
+      ->setType('email')
+      ->setRequired()
+      ->addRule($form::EMAIL)
+      ->getControlPrototype()
+        ->autofocus(true);
+
+    $form->addPassword('password', 'Heslo')
+      ->setRequired()
+      ->addRule($form::FILLED);
+
+    $form->addPassword('passwordConfirm', 'Heslo znova')
+      ->setOmitted()
+      ->setRequired()
+      ->addRule($form::EQUAL, 'Hesla se musí shodovat.', $form['password']);
+
+    $form->addSubmit('send', 'Registrovat')
+      ->getControlPrototype()
+        ->addClass('btn-primary');
+  }
+
+
+  /**
+   * @param UI\Form $form
+   * @param $values
+   * @throws \PDOException
+   */
+  public function processingRegister(UI\Form $form, $values)
+  {
+    try {
+      $values->role = \App\Model\UserService::ROLE_USER;
+      $values->password = Passwords::hash($values->password);
+      $this->userService->insert($values);
+
+      $this->onSuccess($form, $values);
+    }
+    catch (\PDOException $e) {
+      if ($e->errorInfo[1] == 1062) {
+        $form['email']->addError('Tento e-mail je již zaregistrován.');
+      }
+      else {
+        $this->onException($e, $form);
+      }
     }
   }
 }
