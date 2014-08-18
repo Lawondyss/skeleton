@@ -2,4 +2,48 @@
 * @author Ladislav Vondráček
 *}
 
-{control form}
+{form form class => 'form-horizontal'}
+  <div n:if="$form->hasErrors()" class="alert alert-danger">
+    <div n:foreach="$form->getErrors() as $error">{_$error}</div>
+  </div>
+
+  {var $submitButtons = $hiddens = []}
+  {foreach $form->components as $component}
+    {if $component instanceof Nette\Forms\Controls\Checkbox || $component instanceof Nette\Forms\Controls\CheckboxList}
+      <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-8">
+          <div class="checkbox">{!$component->control}</div>
+        </div>
+      </div>
+    {elseif $component instanceof Nette\Forms\Controls\RadioList}
+      <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-8">
+          <div class="radio">{$component->control}</div>
+        </div>
+      </div>
+    {elseif $component instanceof Nette\Forms\Controls\SelectBox || $component instanceof Nette\Forms\Controls\TextInput}
+      <div n:class="form-group, $component->hasErrors() ? 'has-error'">
+        {$component->label->addClass('col-sm-4 control-label')}
+        <div class="col-sm-8">{$component->control->addClass('form-control')}</div>
+      </div>
+    {elseif $component instanceof Nette\Forms\Controls\HiddenField}
+      {? $hiddens[] = $component}
+    {elseif $component instanceof Nette\Forms\Controls\SubmitButton}
+      {? $submitButtons[] = $component}
+    {/if}
+  {/foreach}
+
+  <div>
+    {foreach $hiddens as $hidden}
+      {$hidden->control}
+    {/foreach}
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-4 col-sm-8">
+      {foreach $submitButtons as $button}
+        {$button->control->addClass('btn btn-default')}
+      {/foreach}
+    </div>
+  </div>
+{/form}
