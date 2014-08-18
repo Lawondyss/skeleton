@@ -89,6 +89,44 @@ abstract class BasePresenter extends Presenter
 
 
   /**
+   * @param string $message
+   */
+  public function infoMessage($message)
+  {
+    $this->flashMessage($message, 'info');
+  }
+
+
+  /**
+   * @param string $message
+   */
+  public function successMessage($message)
+  {
+    $this->flashMessage($message, 'success');
+  }
+
+
+  /**
+   * @param string $message
+   * @param \Exception|null $e
+   */
+  public function errorMessage($message, \Exception $e = null)
+  {
+    $this->flashMessage($message, 'danger');
+
+    if (isset($e)) {
+      if(\Tracy\Debugger::$productionMode) {
+        \Tracy\Debugger::log($e, Debugger::ERROR);
+      }
+      else {
+        $this->flashMessage($e->getMessage(), 'info');
+      }
+    }
+
+  }
+
+
+  /**
    * @param \WebLoader\Nette\LoaderFactory
    * @return \WebLoader\Nette\CssLoader
    */
