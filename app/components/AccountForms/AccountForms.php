@@ -64,8 +64,6 @@ class AccountForms extends UI\Control
   {
     switch ($this->type) {
       case self::SIGNIN:
-        $file = '/signin.latte';
-        break;
       case self::REGISTER:
       default:
         $file = '/template.latte';
@@ -122,17 +120,16 @@ class AccountForms extends UI\Control
       ->setRequired()
       ->addRule($form::EMAIL)
       ->getControlPrototype()
-        ->placeholder($this->translator->translate('E-mail'))
         ->autofocus(true);
 
     $form->addPassword('password', 'Heslo')
-      ->setRequired()
-      ->getControlPrototype()
-        ->placeholder($this->translator->translate('Heslo'));
+      ->setRequired();
 
     $form->addCheckbox('remember', 'Pamatovat si mě');
 
-    $form->addSubmit('send', 'Přihlásit');
+    $form->addSubmit('send', 'Přihlásit')
+      ->getControlPrototype()
+        ->addClass('btn-primary');
   }
 
 
