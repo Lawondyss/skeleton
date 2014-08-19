@@ -119,7 +119,7 @@ abstract class BasePresenter extends Presenter
         \Tracy\Debugger::log($e, Debugger::ERROR);
       }
       else {
-        $this->flashMessage($e->getMessage(), 'info');
+        $this->flashMessage(get_class($e) . ': ' . $e->getMessage(), 'info');
       }
     }
 
