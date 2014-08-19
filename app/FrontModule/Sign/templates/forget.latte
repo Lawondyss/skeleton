@@ -1,0 +1,21 @@
+{**
+* @author Ladislav Vondráček
+*}
+
+{block #content}
+
+<div class="row">
+  <div class="col-sm-offset-3 col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading panel-title" n:block="title">
+        {_'Žádost o heslo'}
+      </div>
+      <div class="panel-body">
+        {control forgetForm}
+      </div>
+      <div class="panel-footer">
+        {_'Vzpomněli jste si?'} <a n:href="Sign:in">{_'Přihlašte se.'}</a>
+      </div>
+    </div>
+  </div>
+</div>

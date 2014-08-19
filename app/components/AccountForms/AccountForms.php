@@ -16,6 +16,10 @@ class AccountForms extends UI\Control
 
   const REGISTER = 2;
 
+  const FORGET = 3;
+
+  const RESET = 4;
+
 
   /** @var array */
   public $onSuccess = [];
@@ -65,6 +69,8 @@ class AccountForms extends UI\Control
     switch ($this->type) {
       case self::SIGNIN:
       case self::REGISTER:
+      case self::FORGET:
+      case self::RESET:
       default:
         $file = '/template.latte';
     }
@@ -98,6 +104,14 @@ class AccountForms extends UI\Control
       case self::REGISTER:
         $this->setupRegisterFields($form);
         $callback = $this->processingRegister;
+        break;
+      case self::FORGET:
+        $this->setupForgetFields($form);
+        $callback = $this->processingForget;
+        break;
+      case self::RESET:
+        $this->setupResetFields($form);
+        $callback = $this->processingReset;
         break;
       default:
         $msg = isset($this->renderType) ? 'Render type is wrong.' : 'Render type not set';
@@ -206,6 +220,109 @@ class AccountForms extends UI\Control
       }
     }
   }
+
+
+  /**
+   * @param UI\Form $form
+   */
+  private function setupForgetFields(UI\Form $form)
+  {
+    $form->addText('email', 'Váš přihlašovací e-mail')
+      ->setRequired()
+      ->setOption('description', 'Na e-mail bude odeslán odkaz pro reset hesla.')
+      ->getControlPrototype()
+        ->autofocus = true;
+
+    $form->addSubmit('send', 'Zaslat')
+      ->getControlPrototype()
+        ->addClass('btn-primary');
+  }
+
+
+  /**
+   * @param UI\Form $form
+   * @param $values
+   * @throws \ErrorException
+   */
+  public function processingForget(UI\Form $form, $values)
+  {
+    try {
+      $user = $this->userService->findByEmail($values->email);
+      if ($user === false) {
+        $form->addError('Podle e-mailu jste nebyli nalezeni. Zkontrolujte jeho správnost.');
+        return;
+      }
+
+      $user->update(['token' => (string)(microtime(true) * 10000)]);
+
+      // TODO add send e-mail
+    }
+    catch (\PDOException $e) {
+      $this->onException($e, $form);
+    }
+
+    $this->onSuccess($form, $values);
+  }
+
+
+  /**
+   * @param UI\Form $form
+   */
+  public function setupResetFields(UI\Form $form)
+  {
+    $form->addPassword('password', 'Heslo')
+      ->setRequired()
+      ->getControlPrototype()
+        ->autofocus = true;
+
+    $form->addPassword('passwordConfirm', 'Heslo znova')
+      ->setRequired()
+      ->setOmitted()
+      ->addRule($form::EQUAL, 'Hesla se musí shodovat.', $form['password']);
+
+    $token = $this->presenter->getParameter('token');
+    $form->addHidden('token', $token);
+
+    $form->addSubmit('send', 'Uložit')
+      ->getControlPrototype()
+        ->addClass('btn-primary');
+  }
+
+
+  /**
+   * @param UI\Form $form
+   * @param $values
+   * @throws \ErrorException
+   */
+  public function processingReset(UI\Form $form, $values)
+  {
+    try {
+      if (!isset($values->token)) {
+        throw new \ErrorException('Token nebyl nalezen v odeslaných datech.');
+      }
+
+      $user = $this->userService->findByToken($values->token);
+      if ($user === false) {
+        $msg = sprintf('Podle tokenu "%s" nebyl dohledán uživatel.', $values->token);
+        throw new \ErrorException($msg);
+      }
+
+      $data = [
+        'password' => Passwords::hash($values->password),
+        'token' => null,
+      ];
+      $user->update($data);
+
+      $this->onSuccess($form, $values);
+    }
+    catch (\PDOException $e) {
+      $this->onException($e, $form);
+    }
+    catch (\ErrorException $e) {
+      $this->onException($e, $form);
+    }
+  }
+
 }
 
 

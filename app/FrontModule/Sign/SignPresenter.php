@@ -11,6 +11,15 @@ class SignPresenter extends BasePresenter
   }
 
 
+  public function renderReset()
+  {
+    $token = $this->presenter->getParameter('token');
+    if (!isset($token) || $token === '') {
+      $this->errorMessage('Nelze najít ověřovací token. Pokud jste neupravili odkaz, je to naše vina.');
+    }
+  }
+
+
   /**
    * @param \Lawondyss\AccountFormsFactory $accountFormsFactory
    * @return \Lawondyss\AccountForms
@@ -43,6 +52,57 @@ class SignPresenter extends BasePresenter
 
     $control->onException[] = function($e, $form) {
       $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
+    };
+
+    return $control;
+  }
+
+
+  /**
+   * @param \Lawondyss\AccountFormsFactory $accountFormsFactory
+   * @param \App\Model\UserService $userService
+   * @return \Lawondyss\AccountForms
+   */
+  protected function createComponentForgetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
+  {
+    $control = $accountFormsFactory->create();
+    $control->setTranslator($this->translator);
+    $control->setType($control::FORGET);
+    $control->setUserService($userService);
+
+    $control->onException[] = function($e) {
+      $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
+    };
+
+    $control->onSuccess[] = function() {
+      $this->successMessage('Byl odeslán resetovací e-mail.');
+      $this->redirect('this');
+    };
+
+    return $control;
+  }
+
+
+  /**
+   * @param \Lawondyss\AccountFormsFactory $accountFormsFactory
+   * @param \App\Model\UserService $userService
+   * @return \Lawondyss\AccountForms
+   */
+  protected function createComponentResetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
+  {
+    $control = $accountFormsFactory->create();
+    $control->setTranslator($this->translator);
+    $control->setType($control::RESET);
+    $control->setUserService($userService);
+
+    $control->onException[] = function($e) {
+      $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
+      $this->redirect('Sign:forget');
+    };
+
+    $control->onSuccess[] = function() {
+      $this->successMessage('Heslo bylo uloženo. Nyní se můžete přihlásit.');
+      $this->redirect('Sign:in');
     };
 
     return $control;
