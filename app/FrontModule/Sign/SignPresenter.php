@@ -61,13 +61,16 @@ class SignPresenter extends BasePresenter
   /**
    * @param \Lawondyss\AccountFormsFactory $accountFormsFactory
    * @param \App\Model\UserService $userService
+   * @param \Nette\Mail\IMailer $mailer
    * @return \Lawondyss\AccountForms
    */
-  protected function createComponentForgetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
+  protected function createComponentForgetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService, \Nette\Mail\IMailer $mailer)
   {
     $control = $accountFormsFactory->create();
+    $control->setMailer($mailer);
     $control->setTranslator($this->translator);
     $control->setType($control::FORGET);
+    $control->setEmailFrom($this->getAppParameter('email.noreply'));
     $control->setUserService($userService);
 
     $control->onException[] = function($e) {

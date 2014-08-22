@@ -27,6 +27,9 @@ class AccountForms extends UI\Control
   /** @var array */
   public $onException = [];
 
+  /** @var \Nette\Mail\IMailer */
+  private $mailer;
+
   /** @var \Nette\Localization\ITranslator */
   private $translator;
 
@@ -35,6 +38,18 @@ class AccountForms extends UI\Control
 
   /** @var string */
   private $type;
+
+  /** @var string */
+  private $emailFrom;
+
+
+  /**
+   * @param \Nette\Mail\IMailer $mailer
+   */
+  public function setMailer(\Nette\Mail\IMailer $mailer)
+  {
+    $this->mailer = $mailer;
+  }
 
 
   /**
@@ -61,6 +76,15 @@ class AccountForms extends UI\Control
   public function setType($type)
   {
     $this->type = $type;
+  }
+
+
+  /**
+   * @param string $emailFrom
+   */
+  public function setEmailFrom($emailFrom)
+  {
+    $this->emailFrom = $emailFrom;
   }
 
 
@@ -255,7 +279,7 @@ class AccountForms extends UI\Control
 
       $user->update(['token' => (string)(microtime(true) * 10000)]);
 
-      // TODO add send e-mail
+      $this->sendResetMail($this->emailFrom, $user->email, $user->token);
     }
     catch (\PDOException $e) {
       $this->onException($e, $form);
@@ -321,6 +345,35 @@ class AccountForms extends UI\Control
     catch (\ErrorException $e) {
       $this->onException($e, $form);
     }
+  }
+
+
+  /**
+   * @param string $from
+   * @param string $to
+   * @param string|int $token
+   * @param string $webTitle
+   */
+  private function sendResetMail($from, $to, $token, $webTitle = '')
+  {
+    $mail = new \Nette\Mail\Message;
+    $mail->setFrom($from);
+    $mail->addTo($to);
+
+    $link = $_SERVER['HTTP_HOST'] . $this->presenter->link('Sign:reset', array('token' => $token));
+    $body =
+      'Zdravíčko,' . PHP_EOL .
+      PHP_EOL .
+      ($webTitle !== '' ? 'na stránce webu ' . webTtitle . ' ' : '') .
+      'byla podána žádost o reset Vašeho hesla.' . PHP_EOL .
+      'Ten provedete na odkazu: ' . $link . PHP_EOL . PHP_EOL .
+      'Pokud jste o reset hesla nezažádali, tento e-mail ignorujte.' . PHP_EOL .
+      PHP_EOL .
+      'Přejeme příjemný den.'
+    ;
+    $mail->setBody($body);
+
+    $this->mailer->send($mail);
   }
 
 }
