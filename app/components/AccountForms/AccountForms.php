@@ -45,46 +45,56 @@ class AccountForms extends UI\Control
 
   /**
    * @param \Nette\Mail\IMailer $mailer
+   * @return $this
    */
   public function setMailer(\Nette\Mail\IMailer $mailer)
   {
     $this->mailer = $mailer;
+    return $this;
   }
 
 
   /**
    * @param \Nette\Localization\ITranslator $translator
+   * @return $this
    */
   public function setTranslator(\Nette\Localization\ITranslator $translator)
   {
     $this->translator = $translator;
+    return $this;
   }
 
 
   /**
    * @param \App\Model\Service $userService
+   * @return $this
    */
   public function setUserService(\App\Model\Service $userService)
   {
     $this->userService = $userService;
+    return $this;
   }
 
 
   /**
-   * @param string
+   * @param string $type
+   * @return $this
    */
   public function setType($type)
   {
     $this->type = $type;
+    return $this;
   }
 
 
   /**
    * @param string $emailFrom
+   * @return $this
    */
   public function setEmailFrom($emailFrom)
   {
     $this->emailFrom = $emailFrom;
+    return $this;
   }
 
 
