@@ -77,14 +77,30 @@ abstract class BasePresenter extends Presenter
    */
   protected function getAppParameter($name)
   {
-    $appParameters = $this->context->parameters['app'];
+    $values = $this->context->parameters['app'];
+    $nextIndex = $name;
 
-    if (!array_key_exists($name, $appParameters)) {
+    // explode by "." in name to indexes
+    while (strpos($nextIndex, '.') !== false) {
+      $index = strstr($nextIndex, '.', true);
+      $nextIndex = substr(strstr($nextIndex, '.'), 1);
+
+      if (!array_key_exists($index, $values)) {
+        $msg = sprintf('Parameter "%s" not exists.', $name);
+        throw new \InvalidArgumentException($msg);
+      }
+
+      $values = $values[$index];
+    }
+
+    $name = $nextIndex;
+
+    if (!array_key_exists($name, $values)) {
       $msg = sprintf('Parameter "%s" not exists.', $name);
       throw new \InvalidArgumentException($msg);
     }
 
-    return $appParameters[$name];
+    return $values[$name];
   }
 
 
