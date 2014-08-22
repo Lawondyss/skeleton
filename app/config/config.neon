@@ -11,6 +11,9 @@ parameters:
     keywords:
       - project
       - keywords
+    domain: skeleton.dev
+    email:
+      noreply: noreply@%app.domain%
 
   assets:
     bootstrap:
