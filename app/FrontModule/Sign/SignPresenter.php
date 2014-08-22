@@ -27,8 +27,8 @@ class SignPresenter extends BasePresenter
   protected function createComponentSignInForm(\Lawondyss\AccountFormsFactory $accountFormsFactory)
   {
     $control = $accountFormsFactory->create();
-    $control->setTranslator($this->translator);
-    $control->setType($control::SIGNIN);
+    $control->setTranslator($this->translator)
+      ->setType($control::SIGNIN);
 
     $control->onSuccess[] = function() {
       $this->redirect(':Admin:Home:');
@@ -46,9 +46,9 @@ class SignPresenter extends BasePresenter
   protected function createComponentRegisterForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
   {
     $control = $accountFormsFactory->create();
-    $control->setTranslator($this->translator);
-    $control->setType($control::REGISTER);
-    $control->setUserService($userService);
+    $control->setTranslator($this->translator)
+      ->setType($control::REGISTER)
+      ->setUserService($userService);
 
     $control->onException[] = function($e, $form) {
       $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
@@ -67,11 +67,11 @@ class SignPresenter extends BasePresenter
   protected function createComponentForgetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService, \Nette\Mail\IMailer $mailer)
   {
     $control = $accountFormsFactory->create();
-    $control->setMailer($mailer);
-    $control->setTranslator($this->translator);
-    $control->setType($control::FORGET);
-    $control->setEmailFrom($this->getAppParameter('email.noreply'));
-    $control->setUserService($userService);
+    $control->setMailer($mailer)
+      ->setTranslator($this->translator)
+      ->setType($control::FORGET)
+      ->setEmailFrom($this->getAppParameter('email.noreply'))
+      ->setUserService($userService);
 
     $control->onException[] = function($e) {
       $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
@@ -94,9 +94,9 @@ class SignPresenter extends BasePresenter
   protected function createComponentResetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
   {
     $control = $accountFormsFactory->create();
-    $control->setTranslator($this->translator);
-    $control->setType($control::RESET);
-    $control->setUserService($userService);
+    $control->setTranslator($this->translator)
+      ->setType($control::RESET)
+      ->setUserService($userService);
 
     $control->onException[] = function($e) {
       $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
