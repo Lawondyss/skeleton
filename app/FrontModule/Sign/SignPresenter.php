@@ -14,8 +14,19 @@ class SignPresenter extends BasePresenter
   public function renderReset()
   {
     $token = $this->presenter->getParameter('token');
-    if (!isset($token) || $token === '') {
-      $this->errorMessage('Nelze najít ověřovací token. Pokud jste neupravili odkaz, je to naše vina.');
+
+    // check token
+    if (!isset($token) || $token === '' || !is_numeric($token)) {
+      $e = new \ErrorException('Nelze najít token.');
+      $this->errorMessage('Chybná adresa. Pokud jste neupravili odkaz, zkuste znova zažádat o reset hesla. Jinak použijte původní odkaz.', $e);
+      $this->redirect('forget');
+    }
+
+    // check expire token
+    $expireTime = (int)$token / 10000 + $this->getAppParameter('tokenExpire');
+    if ($expireTime < time()) {
+      $this->errorMessage('Čas pro reset hesla vypršel. Zažádejte znova.');
+      $this->redirect('forget');
     }
   }
 

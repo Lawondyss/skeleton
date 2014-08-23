@@ -14,6 +14,7 @@ parameters:
     domain: skeleton.dev
     email:
       noreply: noreply@%app.domain%
+    tokenExpire: 86400 # 1 day
 
   assets:
     bootstrap:
