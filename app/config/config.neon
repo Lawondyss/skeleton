@@ -103,7 +103,8 @@ services:
   router: @App\RouterFactory::createRouter
   - Lawondyss\MenuFactory
   - Lawondyss\AccountFormsFactory
-  message: Nette\Mail\Message
+  - Nette\Mail\Message
+  - Lawondyss\Mails
 
 
 webloader:
