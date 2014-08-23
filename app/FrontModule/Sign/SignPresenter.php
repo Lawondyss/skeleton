@@ -62,22 +62,26 @@ class SignPresenter extends BasePresenter
    * @param \Lawondyss\AccountFormsFactory $accountFormsFactory
    * @param \App\Model\UserService $userService
    * @param \Nette\Mail\IMailer $mailer
+   * @param \Nette\Mail\Message $mail
    * @return \Lawondyss\AccountForms
    */
-  protected function createComponentForgetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService, \Nette\Mail\IMailer $mailer)
+  protected function createComponentForgetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService, \Nette\Mail\IMailer $mailer, \Nette\Mail\Message $mail)
   {
     $control = $accountFormsFactory->create();
-    $control->setMailer($mailer)
-      ->setTranslator($this->translator)
+    $control->setTranslator($this->translator)
       ->setType($control::FORGET)
-      ->setEmailFrom($this->getAppParameter('email.noreply'))
       ->setUserService($userService);
 
     $control->onException[] = function($e) {
       $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
     };
 
-    $control->onSuccess[] = function() {
+    $control->onSuccess[] = function(\Nette\Application\UI\Form $form, $values) use ($mailer, $mail) {
+      $from = $this->getAppParameter('email.noreply');
+      $to = $values->email;
+      $token = $values->token;
+      $webTitle = $this->getAppParameter('title');
+      $this->sendForgetMail($mail, $mailer, $from, $to, $token, $webTitle);
       $this->successMessage('Byl odeslán resetovací e-mail.');
       $this->redirect('this');
     };
@@ -109,5 +113,35 @@ class SignPresenter extends BasePresenter
     };
 
     return $control;
+  }
+
+
+  /**
+   * @param \Nette\Mail\Message $mail
+   * @param \Nette\Mail\IMailer $mailer
+   * @param string $from
+   * @param string $to
+   * @param string|int $token
+   * @param string $webTitle
+   */
+  private function sendForgetMail(\Nette\Mail\Message $mail, \Nette\Mail\IMailer $mailer, $from, $to, $token, $webTitle = '')
+  {
+    $mail->setFrom($from);
+    $mail->addTo($to);
+
+    $link = $_SERVER['HTTP_HOST'] . $this->link('Sign:reset', array('token' => $token));
+    $body =
+      'Zdravíčko,' . PHP_EOL .
+      PHP_EOL .
+      ($webTitle !== '' ? 'na stránce webu ' . $webTitle . ' ' : '') .
+      'byla podána žádost o reset Vašeho hesla.' . PHP_EOL .
+      'Ten provedete na odkazu: ' . $link . PHP_EOL . PHP_EOL .
+      'Pokud jste o reset hesla nezažádali, tento e-mail ignorujte.' . PHP_EOL .
+      PHP_EOL .
+      'Přejeme příjemný den.'
+    ;
+    $mail->setBody($body);
+
+    $mailer->send($mail);
   }
 }
