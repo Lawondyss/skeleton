@@ -2,9 +2,9 @@
 
 namespace App\Presenters;
 
-use KdybyTests\Autowired\DummyPresenter;
 use Nette\Application\UI\Presenter;
 use WebLoader\Nette\CssLoader;
+use Tracy\Debugger;
 
 abstract class BasePresenter extends Presenter
 {
@@ -131,8 +131,8 @@ abstract class BasePresenter extends Presenter
     $this->flashMessage($message, 'danger');
 
     if (isset($e)) {
-      if(\Tracy\Debugger::$productionMode) {
-        \Tracy\Debugger::log($e, Debugger::ERROR);
+      if(Debugger::$productionMode) {
+        Debugger::log($e, Debugger::ERROR);
       }
       else {
         $this->flashMessage(get_class($e) . ': ' . $e->getMessage(), 'info');
