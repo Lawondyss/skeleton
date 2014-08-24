@@ -99,7 +99,7 @@ services:
 
   authorizator: Security\Authorizator
   authenticator: Security\Authenticator
-  # authenticator: Nette\Security\SimpleAuthenticator(%users%) -- only for simple login
+  # authenticator: Nette\Security\SimpleAuthenticator(%users%) # only for simple login
   translator: Lawondyss\Translator
   - App\RouterFactory
   router: @App\RouterFactory::createRouter
