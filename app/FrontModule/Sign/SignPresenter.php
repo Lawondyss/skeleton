@@ -39,7 +39,7 @@ class SignPresenter extends BasePresenter
   {
     $control = $accountFormsFactory->create();
     $control->setTranslator($this->translator)
-      ->setType($control::SIGNIN);
+      ->setType($control::SIGN_IN);
 
     $control->onSuccess[] = function() {
       $this->redirect(':Admin:Home:');

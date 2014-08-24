@@ -12,7 +12,7 @@ use Nette\Security\Passwords;
 
 class AccountForms extends UI\Control
 {
-  const SIGNIN = 1;
+  const SIGN_IN = 1;
 
   const REGISTER = 2;
 
@@ -74,7 +74,7 @@ class AccountForms extends UI\Control
   public function render()
   {
     switch ($this->type) {
-      case self::SIGNIN:
+      case self::SIGN_IN:
       case self::REGISTER:
       case self::FORGET:
       case self::RESET:
@@ -104,7 +104,7 @@ class AccountForms extends UI\Control
     }
 
     switch ($this->type) {
-      case self::SIGNIN:
+      case self::SIGN_IN:
         $this->setupSignInFields($form);
         $callback = $this->processingSignIn;
         break;
