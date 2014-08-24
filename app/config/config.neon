@@ -40,10 +40,12 @@ parameters:
         link: :Admin:Home:default
         text: Domů
         icon: home
+        resource: Admin:Home
       -
         link: :Admin:Users:default
         text: Uživatelé
         icon: user
+        resource: Admin:Users
       -
         link: :Front:Sign:out
         text: Odhlásit

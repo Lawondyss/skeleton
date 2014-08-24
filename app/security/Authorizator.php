@@ -11,6 +11,7 @@ use Nette\Security as NS;
 
 class Authorizator extends NS\Permission implements NS\IAuthorizator
 {
+  const GUEST = 'guest';
   const USER = 'user';
   const ADMIN = 'admin';
 
@@ -18,7 +19,8 @@ class Authorizator extends NS\Permission implements NS\IAuthorizator
   public function __construct()
   {
     // define roles
-    $this->addRole(self::USER);
+    $this->addRole(self::GUEST);
+    $this->addRole(self::USER, self::GUEST);
     $this->addRole(self::ADMIN, self::USER);
 
     // define admin resources

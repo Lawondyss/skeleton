@@ -19,6 +19,8 @@ class MenuItem extends \Nette\Object
 
   public $current;
 
+  public $resource;
+
 
   /**
    * @return bool
@@ -43,6 +45,16 @@ class MenuItem extends \Nette\Object
     }
 
     return ($linkPresenter == $currPresenter);
+  }
+
+
+  /**
+   * @param \Nette\Security\User $user
+   * @return bool
+   */
+  public function isAllowed(\Nette\Security\User $user)
+  {
+    return (isset($this->resource)) ? $user->isAllowed($this->resource) : true;
   }
 
 
