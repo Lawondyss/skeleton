@@ -21,26 +21,31 @@ class Menu extends UI\Control
 
   /**
    * @param \Nette\Localization\ITranslator $translator
+   * @return self
    */
   public function setTranslator(ITranslator $translator)
   {
     $this->translator = $translator;
+    return $this;
   }
 
 
   /**
    * @param string $current
+   * @return self
    */
   public function setCurrent($current)
   {
     $this->current = $current;
+    return $this;
   }
 
 
   /**
    * @param array $items
+   * @return self
    */
-  public function setItems($items)
+  public function setItems(array $items)
   {
     foreach ($items as $item) {
       $menuItem = new MenuItem;
@@ -51,6 +56,8 @@ class Menu extends UI\Control
 
       $this->addItem($menuItem);
     }
+
+    return $this;
   }
 
 
