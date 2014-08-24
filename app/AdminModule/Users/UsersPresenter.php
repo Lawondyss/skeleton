@@ -9,7 +9,7 @@ namespace App\AdminModule\Presenters;
 
 class UsersPresenter extends BasePresenter
 {
-  /** @var \App\Model\UserService\UserService @autowire */
+  /** @var \App\Model\UserService @autowire */
   protected $userService;
 
 
