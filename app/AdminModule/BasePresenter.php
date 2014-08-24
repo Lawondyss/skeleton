@@ -17,6 +17,14 @@ abstract class BasePresenter extends \App\Presenters\BasePresenter
       $this->flashMessage('Musíte být přihlášeni.');
       $this->redirect(':Front:Sign:in');
     }
+
+    $resource = $this->getName();
+    if ($resource !== 'Error' && !$this->user->isAllowed($resource)) {
+      $userEmail = $this->user->identity->email;
+      $role = implode('|', $this->user->getRoles());
+      $msg = sprintf('Uživatel "%s" v roli "%s" nemá přístup ke zdroji "%s".', $userEmail, $role, $resource);
+      throw new \Nette\Application\BadRequestException($msg, 403);
+    }
   }
 
 
