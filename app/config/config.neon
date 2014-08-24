@@ -95,11 +95,12 @@ extensions:
 
 
 services:
-  - App\Model\UserService # authenticator
+  - App\Model\UserService
 
   authorizator: Security\Authorizator
-  translator: Lawondyss\Translator
+  authenticator: Security\Authenticator
   # authenticator: Nette\Security\SimpleAuthenticator(%users%) -- only for simple login
+  translator: Lawondyss\Translator
   - App\RouterFactory
   router: @App\RouterFactory::createRouter
   - Lawondyss\MenuFactory
