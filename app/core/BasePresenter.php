@@ -3,7 +3,6 @@
 namespace App\Presenters;
 
 use Nette\Application\UI\Presenter;
-use WebLoader\Nette\CssLoader;
 use Tracy\Debugger;
 
 abstract class BasePresenter extends Presenter
@@ -63,6 +62,7 @@ abstract class BasePresenter extends Presenter
     }
 
     $files = [
+      $dir . '/core/' . $presenter . '/templates/' . $this->getView() . '.latte',
       $dir . '/' . $presenter . '/templates/' . $this->getView() . '.latte',
       $dir . '/templates/' . $this->getView() . '.latte',
     ];
