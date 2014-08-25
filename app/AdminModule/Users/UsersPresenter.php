@@ -55,8 +55,16 @@ class UsersPresenter extends BasePresenter
 
   public function handleRemoveAccount($id)
   {
-    $this->checkId($id);
-    dump($id);
+    try {
+      $this->checkId($id);
+      $this->userService->delete($id);
+      $this->successMessage('Smazáno.');
+    }
+    catch (\PDOException $e) {
+      $this->errorMessage($this->defaultErrorMessage, $e);
+    }
+
+    $this->redirect('this');
   }
 
 
