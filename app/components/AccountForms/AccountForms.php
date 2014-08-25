@@ -20,6 +20,8 @@ class AccountForms extends UI\Control
 
   const RESET = 4;
 
+  const CHANGE = 5;
+
 
   /** @var array */
   public $onSuccess = [];
@@ -32,6 +34,9 @@ class AccountForms extends UI\Control
 
   /** @var \App\Model\Service */
   private $userService;
+
+  /** @var \Nette\Security\User */
+  private $user;
 
   /** @var string */
   private $type;
@@ -61,6 +66,17 @@ class AccountForms extends UI\Control
 
 
   /**
+   * @param \Nette\Security\User $user
+   * @return $this
+   */
+  public function setUser(\Nette\Security\User $user)
+  {
+    $this->user = $user;
+    return $this;
+  }
+
+
+  /**
    * @param string $type
    * @return $this
    */
@@ -78,6 +94,7 @@ class AccountForms extends UI\Control
       case self::REGISTER:
       case self::FORGET:
       case self::RESET:
+      case self::CHANGE:
       default:
         $file = '/template.latte';
     }
@@ -119,6 +136,10 @@ class AccountForms extends UI\Control
       case self::RESET:
         $this->setupResetFields($form);
         $callback = $this->processingReset;
+        break;
+      case self::CHANGE:
+        $this->setupChangeFields($form);
+        $callback = $this->processingChange;
         break;
       default:
         $msg = isset($this->renderType) ? 'Render type is wrong.' : 'Render type not set';
@@ -274,7 +295,7 @@ class AccountForms extends UI\Control
   /**
    * @param UI\Form $form
    */
-  public function setupResetFields(UI\Form $form)
+  private function setupResetFields(UI\Form $form)
   {
     $form->addPassword('password', 'Heslo')
       ->setRequired()
@@ -325,6 +346,52 @@ class AccountForms extends UI\Control
       $this->onException($e, $form);
     }
     catch (\ErrorException $e) {
+      $this->onException($e, $form);
+    }
+  }
+
+
+  /**
+   * @param UI\Form $form
+   */
+  private function setupChangeFields(UI\Form $form)
+  {
+    $form->addPassword('oldPassword', 'Původní heslo')
+      ->setRequired();
+
+    $form->addPassword('newPassword', 'Nové heslo')
+      ->setRequired();
+
+    $form->addPassword('confirmNewPassword', 'Nové heslo znova')
+      ->setOmitted()
+      ->setRequired()
+      ->addRule($form::EQUAL, 'Nová hesla se musí shodovat.', $form['newPassword']);
+
+    $form->addSubmit('send', 'Uložit')
+      ->getControlPrototype()
+        ->addClass('btn-primary');
+  }
+
+
+  /**
+   * @param UI\Form $form
+   * @param $values
+   */
+  public function processingChange(UI\Form $form, $values)
+  {
+    try {
+      $user = $this->userService->find($this->user->id);
+      if (!Passwords::verify($values->oldPassword, $user->password)) {
+        $form->addError('Chybné heslo.');
+      }
+      else {
+        $password = Passwords::hash($values->newPassword);
+        $user->update(['password' => $password]);
+
+        $this->onSuccess($form, $values);
+      }
+    }
+    catch (\PDOException $e) {
       $this->onException($e, $form);
     }
   }
