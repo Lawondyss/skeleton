@@ -9,36 +9,13 @@ namespace Lawondyss;
 
 use Nette\Application\UI;
 
-class UserForm extends UI\Control
+class UserForm extends BaseFormControl
 {
-  /** @var array */
-  public $onSuccess = [];
-
-  /** @var array */
-  public $onException = [];
-
-  /** @var \Nette\Localization\ITranslator */
-  private $translator;
-
   /** @var \App\Model\UserService */
   private $userService;
 
   /** @var array */
-  private $defaults;
-
-  /** @var array */
   private $roles;
-
-
-  /**
-   * @param \Nette\Localization\ITranslator $translator
-   * @return $this
-   */
-  public function setTranslator(\Nette\Localization\ITranslator $translator)
-  {
-    $this->translator = $translator;
-    return $this;
-  }
 
 
   /**
@@ -48,17 +25,6 @@ class UserForm extends UI\Control
   public function setUserService(\App\Model\UserService $userService)
   {
     $this->userService = $userService;
-    return $this;
-  }
-
-
-  /**
-   * @param array $defaults
-   * @return $this
-   */
-  public function setDefaults(array $defaults)
-  {
-    $this->defaults = $defaults;
     return $this;
   }
 
@@ -74,44 +40,13 @@ class UserForm extends UI\Control
   }
 
 
-  public function render()
-  {
-    $this->template->setFile(__DIR__ . '/template.latte');
-    if (isset($this->translator)) {
-      $this->template->setTranslator($this->translator);
-    }
-    $this->template->render();
-  }
-
-
-  /**
-   * @return UI\Form
-   */
-  protected function createComponentForm()
-  {
-    $form = new UI\Form;
-
-    $form->onSuccess[] = $this->processingForm;
-
-    if (isset($this->translator)) {
-      $form->setTranslator($this->translator);
-    }
-
-    $this->setupFields($form);
-
-    if (isset($this->defaults)) {
-      $form->setValues($this->defaults);
-    }
-
-    return $form;
-  }
-
-
   /**
    * @param UI\Form $form
    */
-  private function setupFields(UI\Form $form)
+  protected function setupFields(UI\Form $form)
   {
+    parent::setupFields($form);
+
     $form->addText('email', 'E-mail')
       ->setType('email')
       ->setRequired()
@@ -128,6 +63,11 @@ class UserForm extends UI\Control
     $form->addSubmit('send', 'uložit')
       ->getControlPrototype()
         ->addClass('btn-primary');
+
+    $form->addSubmit('cancel', 'zrušit')
+      ->setValidationScope(false)
+      ->getControlPrototype()
+        ->addClass('btn-link');
   }
 
 
@@ -137,6 +77,11 @@ class UserForm extends UI\Control
    */
   public function processingForm(UI\Form $form, $values)
   {
+    if ($form->submitted->name === 'cancel') {
+      $this->onCancel($form, $values);
+      return;
+    }
+
     try {
       if (!isset($this->userService)) {
         throw new \ErrorException('Služba "UserService" není definována.');
