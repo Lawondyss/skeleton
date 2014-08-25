@@ -19,9 +19,9 @@ interface Service
 
   public function findAllBy(array $conditions);
 
-  public function insert(\Traversable $data);
+  public function insert($data);
 
-  public function update(\Traversable $data, $id);
+  public function update($data, $id);
 
   public function delete($id);
 }

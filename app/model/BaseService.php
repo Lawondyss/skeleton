@@ -108,10 +108,10 @@ abstract class BaseService extends \Nette\Object implements Service
 
 
   /**
-   * @param \Traversable $data
+   * @param array|\Traversable|Selection array($column => $value)|\Traversable|Selection for INSERT ... SELECT
    * @return int ID of new record.
    */
-  public function insert(\Traversable $data)
+  public function insert($data)
   {
     $result = $this->getTable()->insert($data);
     $id = $result->getPrimary();
@@ -120,11 +120,11 @@ abstract class BaseService extends \Nette\Object implements Service
 
 
   /**
-   * @param \Traversable $data
+   * @param array|\Traversable|Selection array($column => $value)|\Traversable|Selection for INSERT ... SELECT
    * @param int $id
    * @return int Count of affected rows.
    */
-  public function update(\Traversable $data, $id)
+  public function update($data, $id)
   {
     $affectedRows = $this->getTable()->wherePrimary($id)->update($data);
     return $affectedRows;
