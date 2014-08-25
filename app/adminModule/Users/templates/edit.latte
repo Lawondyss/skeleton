@@ -1,0 +1,19 @@
+{**
+* @author Ladislav Vondráček
+*}
+
+{block #content}
+<h1 n:block="title">{_'Uživatelé'}</h1>
+
+<div class="row">
+  <div class="col-sm-offset-3 col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading panel-title">
+        {if $isEdit}{_'Upravit'}{else}{_'Přidat'}{/if} {_'uživatele'}
+      </div>
+      <div class="panel-body">
+        {control userForm}
+      </div>
+    </div>
+  </div>
+</div>

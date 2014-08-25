@@ -113,6 +113,7 @@ services:
   router: @App\RouterFactory::createRouter
   - Lawondyss\MenuFactory
   - Lawondyss\AccountFormsFactory
+  - Lawondyss\UserFormFactory
   - Nette\Mail\Message
   - Lawondyss\Mails
 

@@ -7,8 +7,24 @@
 
 namespace App\Model;
 
+use Security\Authorizator;
+
 class UserService extends BaseService
 {
+  /**
+   * @return array
+   */
+  public function getRoles()
+  {
+    $roles = [
+      Authorizator::USER => 'uživatel',
+      Authorizator::ADMIN => 'administrátor',
+    ];
+
+    return $roles;
+  }
+
+
   /**
    * @param string $email
    * @return bool|mixed|\Nette\Database\IRow
