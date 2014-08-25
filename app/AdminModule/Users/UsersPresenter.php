@@ -22,13 +22,7 @@ class UsersPresenter extends BasePresenter
   public function actionEdit($id)
   {
     if (isset($id)) {
-      if (!is_numeric($id)) {
-        $msg = sprintf('Chybný formát ID uživatele. ID "%s" je typu "%s".', $id, gettype($id));
-        $e = new \InvalidArgumentException($msg);
-
-        $this->errorMessage('Chybná identifikace uživatele.', $e);
-        $this->redirect('default');
-      }
+      $this->checkId($id);
 
       $user = $this->userService->find($id);
 
@@ -54,12 +48,14 @@ class UsersPresenter extends BasePresenter
 
   public function handleResetPassword($id)
   {
+    $this->checkId($id);
     dump($id);
   }
 
 
   public function handleRemoveAccount($id)
   {
+    $this->checkId($id);
     dump($id);
   }
 
@@ -91,5 +87,28 @@ class UsersPresenter extends BasePresenter
     };
 
     return $control;
+  }
+
+
+  /**
+   * @param int|string $id
+   */
+  private function checkId($id)
+  {
+    if (!is_numeric($id)) {
+      $msg = sprintf('Chybný formát ID uživatele. ID "%s" je typu "%s".', $id, gettype($id));
+      $e = new \InvalidArgumentException($msg);
+
+      $this->errorMessage('Chybná identifikace uživatele.', $e);
+      $this->redirect('default');
+    }
+
+    if ($id == $this->user->id) {
+      $msg = sprintf('Uživatel ID "%s" chtěl zpracovat záznam vlastního uživatele.', $this->user->id);
+      $e = new \InvalidArgumentException($msg);
+
+      $this->errorMessage('Nelze pracovat se záznamem vlastního uživatele.', $e);
+      $this->redirect('default');
+    }
   }
 }
