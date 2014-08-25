@@ -47,6 +47,12 @@ parameters:
         icon: user
         resource: Admin:Users
       -
+        link: :Admin:Settings:default
+        text: Nastavení
+        icon: wrench
+        main: false
+        resource: Admin:Settings
+      -
         link: :Front:Sign:out
         text: Odhlásit
         icon: "off"

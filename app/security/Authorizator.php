@@ -26,10 +26,12 @@ class Authorizator extends NS\Permission implements NS\IAuthorizator
     // define admin resources
     $this->addResource('Admin:Home');
     $this->addResource('Admin:Users');
+    $this->addResource('Admin:Settings');
 
     // define permissions
     $this->allow(self::USER, [
-      'Admin:Home'
+      'Admin:Home',
+      'Admin:Settings',
     ]);
 
     $this->allow(self::ADMIN, self::ALL);
