@@ -17,6 +17,9 @@ abstract class BasePresenter extends Presenter
   /** @var \Lawondyss\Translator @autowire */
   protected $translator;
 
+  /** @var string */
+  protected $defaultErrorMessage = 'Něco je špatně. Zkuste to později, snad už to bude lepší.';
+
 
   protected function startup()
   {

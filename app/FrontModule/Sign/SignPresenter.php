@@ -61,8 +61,8 @@ class SignPresenter extends BasePresenter
       ->setType($control::REGISTER)
       ->setUserService($userService);
 
-    $control->onException[] = function($e, $form) {
-      $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
+    $control->onException[] = function($e) {
+      $this->errorMessage($this->defaultErrorMessage, $e);
     };
 
     return $control;
@@ -83,7 +83,7 @@ class SignPresenter extends BasePresenter
       ->setUserService($userService);
 
     $control->onException[] = function($e) {
-      $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
+      $this->errorMessage($this->defaultErrorMessage, $e);
     };
 
     $control->onSuccess[] = function(\Nette\Application\UI\Form $form, $values) use ($mails) {
@@ -115,7 +115,7 @@ class SignPresenter extends BasePresenter
       ->setUserService($userService);
 
     $control->onException[] = function($e) {
-      $this->errorMessage('Něco je špatně. Zkuste to později, snad už to bude lepší.', $e);
+      $this->errorMessage($this->defaultErrorMessage, $e);
       $this->redirect('Sign:forget');
     };
 
