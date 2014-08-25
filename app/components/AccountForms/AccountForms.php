@@ -22,6 +22,8 @@ class AccountForms extends UI\Control
 
   const CHANGE = 5;
 
+  const VERIFY = 6;
+
 
   /** @var array */
   public $onSuccess = [];
@@ -95,6 +97,7 @@ class AccountForms extends UI\Control
       case self::FORGET:
       case self::RESET:
       case self::CHANGE:
+      case self::VERIFY:
       default:
         $file = '/template.latte';
     }
@@ -140,6 +143,10 @@ class AccountForms extends UI\Control
       case self::CHANGE:
         $this->setupChangeFields($form);
         $callback = $this->processingChange;
+        break;
+      case self::VERIFY:
+        $this->setupVerifyFields($form);
+        $callback = $this->processingVerify;
         break;
       default:
         $msg = isset($this->renderType) ? 'Render type is wrong.' : 'Render type not set';
@@ -367,7 +374,7 @@ class AccountForms extends UI\Control
       ->setRequired()
       ->addRule($form::EQUAL, 'Nová hesla se musí shodovat.', $form['newPassword']);
 
-    $form->addSubmit('send', 'Uložit')
+    $form->addSubmit('send', 'Změnit')
       ->getControlPrototype()
         ->addClass('btn-primary');
   }
@@ -396,6 +403,40 @@ class AccountForms extends UI\Control
     }
   }
 
+
+  /**
+   * @param UI\Form $form
+   */
+  private function setupVerifyFields(UI\Form $form)
+  {
+    $form->addPassword('password', 'Heslo')
+      ->setRequired();
+
+    $form->addSubmit('send', 'Zrušit')
+      ->getControlPrototype()
+        ->addClass('btn-primary');
+  }
+
+
+  /**
+   * @param UI\Form $form
+   * @param $values
+   */
+  public function processingVerify(UI\Form $form, $values)
+  {
+    try {
+      $user = $this->userService->find($this->user->id);
+      if (!Passwords::verify($values->password, $user->password)) {
+        $form->addError('Chybné heslo.');
+      }
+      else {
+        $form->onSuccess($form, $values);
+      }
+    }
+    catch (\PDOException $e) {
+      $this->onException($e, $form);
+    }
+  }
 }
 
 
