@@ -74,6 +74,10 @@ class UsersPresenter extends BasePresenter
       $this->redirect('default');
     };
 
+    $control->onCancel[] = function() {
+      $this->redirect('default');
+    };
+
     return $control;
   }
 }
