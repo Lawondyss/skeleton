@@ -52,6 +52,18 @@ class UsersPresenter extends BasePresenter
   }
 
 
+  public function handleResetPassword($id)
+  {
+    dump($id);
+  }
+
+
+  public function handleRemoveAccount($id)
+  {
+    dump($id);
+  }
+
+
   /**
    * @param \Lawondyss\UserFormFactory $userFormFactory
    * @return \Lawondyss\UserForm
