@@ -1,0 +1,19 @@
+{**
+* @author Ladislav Vondráček
+*}
+<ul class="pagination">
+  <li n:class="$paginator->first ? disabled">
+    <a n:href="this, page => $paginator->page - 1">&laquo;</a>
+  </li>
+  {foreach $steps as $step}
+  <li n:class="$step === $paginator->page ? active ">
+    <a n:href="this, page => $step">{$step}</a>
+  </li>
+  <li n:if="$iterator->nextValue > $step + 1" class="disabled">
+    <a>...</a>
+  </li>
+  {/foreach}
+  <li n:class="$paginator->last ? disabled">
+    <a n:href="this, page => $paginator->page + 1">&raquo;</a>
+  </li>
+</ul>
