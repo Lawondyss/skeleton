@@ -35,11 +35,11 @@ class Authenticator extends \Nette\Object implements NS\IAuthenticator
     if ($user === false) {
       throw new NS\AuthenticationException('Chybný přihlašovací e-mail.');
     }
-    elseif (!NS\Passwords::verify($password, $user->password)) {
+    elseif (!self::verifyPassword($password, $user->password)) {
       throw new NS\AuthenticationException('Chybné přihlašovací heslo.');
     }
     elseif (NS\Passwords::needsRehash($user->password)) {
-      $user->update(['password' => NS\Passwords::hash($password)]);
+      $user->update(['password' => self::hashPassword($password)]);
     }
 
     $data = $user->toArray();

@@ -288,7 +288,7 @@ class AccountForms extends UI\Control
         return;
       }
 
-      $user->update(['token' => (string)(microtime(true) * 10000)]);
+      $user->update(['token' => \Security\Authenticator::generateToken()]);
       $values->token = $user->token;
 
       $this->onSuccess($form, $values);

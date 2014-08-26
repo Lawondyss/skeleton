@@ -23,8 +23,8 @@ class SignPresenter extends BasePresenter
     }
 
     // check expire token
-    $expireTime = (int)$token / 10000 + $this->getAppParameter('tokenExpire');
-    if ($expireTime < time()) {
+    $validity = \Security\Authenticator::validateToken($token, $this->getAppParameter('tokenExpire'));
+    if (!$validity) {
       $this->errorMessage('Čas pro reset hesla vypršel. Zažádejte znova.');
       $this->redirect('forget');
     }
