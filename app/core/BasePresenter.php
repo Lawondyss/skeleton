@@ -20,6 +20,9 @@ abstract class BasePresenter extends Presenter
   /** @var string */
   protected $defaultErrorMessage = 'Něco je špatně. Zkuste to později, snad už to bude lepší.';
 
+  /** @var int */
+  protected $itemsPerPage = 20;
+
 
   protected function startup()
   {
@@ -195,6 +198,19 @@ abstract class BasePresenter extends Presenter
     $control->setTranslator($this->translator)
       ->setCurrent($this->name . ':' . $this->action)
       ->setItems($parameters['menu']['front']);
+
+    return $control;
+  }
+
+
+  /**
+   * @param \Lawondyss\PaginatorFactory $paginatorFactory
+   * @return \Lawondyss\Paginator
+   */
+  protected function createComponentPaginator(\Lawondyss\PaginatorFactory $paginatorFactory)
+  {
+    $control = $paginatorFactory->create();
+    $control->setItemsPerPage($this->itemsPerPage);
 
     return $control;
   }

@@ -18,7 +18,12 @@ class UsersPresenter extends BasePresenter
 
   public function renderDefault()
   {
-    $this->template->users = $this->userService->findAll();
+    $users = $this->userService->findAll();
+
+    $paginator = $this['paginator'];
+    $paginator->setItemsCount($users->count());
+    $users->limit($paginator->itemsPerPage, $paginator->offset);
+    $this->template->users = $users;
   }
 
 
