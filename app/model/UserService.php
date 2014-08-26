@@ -31,7 +31,7 @@ class UserService extends BaseService
    */
   public function findByEmail($email)
   {
-    $result = $this->findBy(['email' => $email]);
+    $result = $this->getBy(['email' => $email]);
     return $result;
   }
 
@@ -42,7 +42,7 @@ class UserService extends BaseService
    */
   public function findByToken($token)
   {
-    $result = $this->findBy(['token' => $token]);
+    $result = $this->getBy(['token' => $token]);
     return $result;
   }
 

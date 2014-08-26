@@ -387,7 +387,7 @@ class AccountForms extends UI\Control
   public function processingChange(UI\Form $form, $values)
   {
     try {
-      $user = $this->userService->find($this->user->id);
+      $user = $this->userService->get($this->user->id);
       if (!Passwords::verify($values->oldPassword, $user->password)) {
         $form->addError('Chybné heslo.');
       }
@@ -425,7 +425,7 @@ class AccountForms extends UI\Control
   public function processingVerify(UI\Form $form, $values)
   {
     try {
-      $user = $this->userService->find($this->user->id);
+      $user = $this->userService->get($this->user->id);
       if (!Passwords::verify($values->password, $user->password)) {
         $form->addError('Chybné heslo.');
       }

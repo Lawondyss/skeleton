@@ -27,7 +27,7 @@ class UsersPresenter extends BasePresenter
     if (isset($id)) {
       $this->checkId($id);
 
-      $user = $this->userService->find($id);
+      $user = $this->userService->get($id);
 
       if ($user === false) {
         $msg = sprintf('Uživatel s ID "%s" nebyl nalezen.', $id);
@@ -54,7 +54,7 @@ class UsersPresenter extends BasePresenter
     try {
       $this->checkId($id);
 
-      $user = $this->userService->find($id);
+      $user = $this->userService->get($id);
 
       $data = [
         'token' => \Security\Authenticator::generateToken(),

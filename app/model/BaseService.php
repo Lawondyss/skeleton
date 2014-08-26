@@ -65,33 +65,11 @@ abstract class BaseService extends \Nette\Object implements Service
 
 
   /**
-   * @param int $id
-   * @return bool|mixed|IRow
-   */
-  public function find($id)
-  {
-    $result = $this->getTable()->wherePrimary($id)->fetch();
-    return $result;
-  }
-
-
-  /**
-   * @param array $conditions
-   * @return bool|mixed|IRow
-   */
-  public function findBy(array $conditions)
-  {
-    $result = $this->getTable()->where($conditions)->fetch();
-    return $result;
-  }
-
-
-  /**
-   * @return array|IRow[]
+   * @return \Nette\Database\Table\Selection
    */
   public function findAll()
   {
-    $result = $this->getTable()->fetchAll();
+    $result = $this->getTable();
     return $result;
   }
 
@@ -100,9 +78,31 @@ abstract class BaseService extends \Nette\Object implements Service
    * @param array $conditions
    * @return array|IRow[]
    */
-  public function findAllBy(array $conditions)
+  public function findBy(array $conditions)
   {
-    $result = $this->getTable()->where($conditions)->fetchAll();
+    $result = $this->findAll()->where($conditions);
+    return $result;
+  }
+
+
+  /**
+   * @param int $id
+   * @return \Nette\Database\Table\IRow
+   */
+  public function get($id)
+  {
+    $result = $this->findAll()->get($id);
+    return $result;
+  }
+
+
+  /**
+   * @param array $conditions
+   * @return bool|mixed|IRow
+   */
+  public function getBy(array $conditions)
+  {
+    $result = $this->findAll()->where($conditions)->fetch();
     return $result;
   }
 

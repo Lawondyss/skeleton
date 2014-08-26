@@ -23,7 +23,7 @@ class HomePresenter extends BasePresenter
   public function actionDefault()
   {
     if (isset($this->user->identity->token)) {
-      $user = $this->userService->find($this->user->id);
+      $user = $this->userService->get($this->user->id);
       $user->update(['token' => null]);
       $this->user->identity->token = null;
     }
