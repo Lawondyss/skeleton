@@ -12,6 +12,9 @@ class UsersPresenter extends BasePresenter
   /** @var \App\Model\UserService @autowire */
   protected $userService;
 
+  /** @var \Lawondyss\Mails @autowire */
+  protected $mails;
+
 
   public function renderDefault()
   {
@@ -48,8 +51,29 @@ class UsersPresenter extends BasePresenter
 
   public function handleResetPassword($id)
   {
-    $this->checkId($id);
-    dump($id);
+    try {
+      $this->checkId($id);
+
+      $user = $this->userService->find($id);
+
+      $data = [
+        'token' => \Security\Authenticator::generateToken(),
+      ];
+      $user->update($data);
+
+      $from = $this->getAppParameter('email.noreply');
+      $to = $user->email;
+      $link = $_SERVER['HTTP_HOST'] . $this->link(':Front:Sign:reset', $data);
+      $webTitle = $this->getAppParameter('title');
+      $this->mails->sendResetPassword($from, $to, $link, $webTitle);
+
+      $this->successMessage('Byl zaslán e-mail pro reset hesla.');
+    }
+    catch (\PDOException $e) {
+      $this->errorMessage($this->defaultErrorMessage, $e);
+    }
+
+    $this->redirect('this');
   }
 
 
@@ -119,4 +143,5 @@ class UsersPresenter extends BasePresenter
       $this->redirect('default');
     }
   }
+
 }

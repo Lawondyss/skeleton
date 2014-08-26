@@ -92,7 +92,7 @@ class SignPresenter extends BasePresenter
       $token = $values->token;
       $link = $_SERVER['HTTP_HOST'] . $this->link('Sign:reset', ['token' => $token]);
       $webTitle = $this->getAppParameter('title');
-      $mails->sendForgetMail($from, $to, $link, $webTitle);
+      $mails->sendResetPassword($from, $to, $link, $webTitle);
 
       $this->successMessage('Byl odeslán resetovací e-mail.');
       $this->redirect('this');

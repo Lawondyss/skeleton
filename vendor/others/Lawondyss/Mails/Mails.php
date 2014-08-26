@@ -33,7 +33,7 @@ class Mails extends \Nette\Object
    * @param string $link
    * @param string $webTitle
    */
-  public function sendForgetMail($from, $to, $link, $webTitle = '')
+  public function sendResetPassword($from, $to, $link, $webTitle = '')
   {
     $this->mail->setFrom($from);
     $this->mail->addTo($to);
