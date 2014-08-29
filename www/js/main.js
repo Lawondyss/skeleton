@@ -5,4 +5,7 @@ $(function(){
     var text = el.attr('data-confirm');
     return confirm(text);
   });
+
+  // bootstrap select
+  $('select').selectpicker();
 });

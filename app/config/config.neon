@@ -22,6 +22,9 @@ parameters:
       js: %wwwDir%/js/bootstrap.min.js
     jquery: %wwwDir%/js/jquery.js
     netteForms: %wwwDir%/js/netteForms.js
+    bootSelect:
+      css: %wwwDir%/css/bootstrap-select.min.css
+      js: %wwwDir%/js/bootstrap-select.min.js
 
   menu:
     front:
@@ -125,6 +128,7 @@ webloader:
     screen:
       files:
         - %assets.bootstrap.css%
+        - %assets.bootSelect.css%
         - %wwwDir%/css/screen.css
 
     print:
@@ -138,4 +142,5 @@ webloader:
         - %assets.jquery%
         - %assets.netteForms%
         - %assets.bootstrap.js%
+        - %assets.bootSelect.js%
         - %wwwDir%/js/main.js
