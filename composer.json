@@ -3,7 +3,8 @@
     "php": ">= 5.3.7",
     "nette/nette": "~2.2.2",
     "janmarek/webloader": "dev-master",
-    "kdyby/autowired": "1.0.*@dev"
+    "kdyby/autowired": "1.0.*@dev",
+    "jandrabek/nette-mailpanel": "dev-master"
   },
   "require-dev": {
     "nette/tester": "~1.0"
