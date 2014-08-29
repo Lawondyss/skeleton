@@ -23,7 +23,7 @@
       <td>{$item->role}</td>
       <td class="text-right">
         {if $item->id !== $user->id}
-        <a n:href="edit $item->id" class="btn btn-default btn-sm">{_'upravit'}</a>
+        <a n:href="edit $item->id" class="btn btn-primary btn-sm">{_'upravit'}</a>
         <a n:href="resetPassword! $item->id" class="btn btn-warning btn-sm"
            data-confirm="Skutečně resetovat heslo uživatele {$item->email}?">{_'reset hesla'}</a>
         <a n:href="removeAccount! $item->id" class="btn btn-danger btn-sm"
