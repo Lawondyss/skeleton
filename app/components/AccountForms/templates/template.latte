@@ -27,7 +27,7 @@
       <div n:class="form-group, $component->required ? required, $component->hasErrors() ? 'has-error'">
         {$component->label->addClass('col-sm-4 control-label')}
         <div class="col-sm-8">{$component->control->addClass('form-control')}</div>
-        <p n:ifcontent class="help-block col-sm-offset-4 col-sm-8">{$component->options['description']}</p>
+        <p n:ifset="$component->options['description']" class="help-block col-sm-offset-4 col-sm-8">{$component->options['description']}</p>
         <div n:ifcontent class="alert alert-danger">{$component->error}</div>
       </div>
     {elseif $component instanceof Nette\Forms\Controls\HiddenField}
