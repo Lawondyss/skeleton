@@ -60,11 +60,9 @@ class UserForm extends BaseFormControl
 
     $form->addHidden('id');
 
-    $form->addSubmit('send', 'uložit')
-      ->getControlPrototype()
-        ->addClass('btn-primary');
+    $form->addSubmit('send', 'Uložit');
 
-    $form->addSubmit('cancel', 'zrušit')
+    $form->addSubmit('cancel', 'Zrušit')
       ->setValidationScope(false)
       ->getControlPrototype()
         ->addClass('btn-link');
@@ -100,7 +98,12 @@ class UserForm extends BaseFormControl
       $this->onSuccess($form, $values);
     }
     catch (\PDOException $e) {
-      $this->onException($e, $form);
+      if ($e->errorInfo[1] == 1062) {
+        $form->addError('Tento e-mail je již zaregistrován.');
+      }
+      else {
+        $this->onException($e, $form);
+      }
     }
     catch (\ErrorException $e) {
       $this->onException($e, $form);

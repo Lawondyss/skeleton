@@ -70,10 +70,6 @@ abstract class BaseFormControl extends UI\Control
   {
     $form = new UI\Form;
 
-    if (isset($this->translator)) {
-      $form->setTranslator($this->translator);
-    }
-
     $this->setupFields($form);
 
     if (isset($this->defaults)) {
