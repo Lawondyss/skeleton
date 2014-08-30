@@ -92,7 +92,7 @@ class Authenticator extends \Nette\Object implements NS\IAuthenticator
   public static function validateToken($token, $timeLimit)
   {
     $expireTime = (int)$token / 10000 + $timeLimit;
-    $validity = $expireTime < time();
+    $validity = $expireTime > time();
     return $validity;
   }
 
