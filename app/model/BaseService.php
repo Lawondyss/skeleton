@@ -117,27 +117,4 @@ abstract class BaseService extends \Nette\Object implements Service
     $id = $result->getPrimary();
     return $id;
   }
-
-
-  /**
-   * @param array|\Traversable|Selection array($column => $value)|\Traversable|Selection for INSERT ... SELECT
-   * @param int $id
-   * @return int Count of affected rows.
-   */
-  public function update($data, $id)
-  {
-    $affectedRows = $this->getTable()->wherePrimary($id)->update($data);
-    return $affectedRows;
-  }
-
-
-  /**
-   * @param int $id
-   * @return int Count of affected rows.
-   */
-  public function delete($id)
-  {
-    $affectedRows = $this->getTable()->wherePrimary($id)->delete();
-    return $affectedRows;
-  }
 }
