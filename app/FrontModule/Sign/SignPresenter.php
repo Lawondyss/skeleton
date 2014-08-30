@@ -4,6 +4,10 @@ namespace App\FrontModule\Presenters;
 
 class SignPresenter extends BasePresenter
 {
+  /** @persistent */
+  public $backlink = '';
+
+
   public function actionOut()
   {
     $this->user->logout(true);
@@ -43,6 +47,9 @@ class SignPresenter extends BasePresenter
       ->setUser($this->user);
 
     $control->onSuccess[] = function() {
+      if (isset($this->backlink)) {
+        $this->restoreRequest($this->backlink);
+      }
       $this->redirect(':Admin:Home:');
     };
 

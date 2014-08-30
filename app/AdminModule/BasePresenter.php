@@ -15,7 +15,7 @@ abstract class BasePresenter extends \App\Presenters\BasePresenter
 
     if (!$this->user->isLoggedIn()) {
       $this->flashMessage('Musíte být přihlášeni.');
-      $this->redirect(':Front:Sign:in');
+      $this->redirect(':Front:Sign:in', ['backlink' => $this->storeRequest()]);
     }
 
     if (isset($this->user->identity->confirm) && $this->name !== 'Admin:Settings') {
