@@ -171,6 +171,10 @@ class AccountForms extends UI\Control
 
     $form->onSuccess[] = $callback;
 
+    if (isset($this->translator)) {
+      $form->setTranslator($this->translator);
+    }
+
     return $form;
   }
 
