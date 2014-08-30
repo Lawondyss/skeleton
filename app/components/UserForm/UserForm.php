@@ -8,6 +8,7 @@
 namespace Lawondyss;
 
 use Nette\Application\UI;
+use Security\Authenticator;
 
 class UserForm extends BaseFormControl
 {
@@ -89,6 +90,7 @@ class UserForm extends BaseFormControl
         'role' => $values->role,
       ];
       if ($values->id === '') {
+        $data['token'] = $values->token = Authenticator::generateToken();
         $this->userService->insert($data);
       }
       else {

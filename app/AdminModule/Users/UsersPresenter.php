@@ -7,6 +7,8 @@
 
 namespace App\AdminModule\Presenters;
 
+use Security\Authenticator;
+
 class UsersPresenter extends BasePresenter
 {
   /** @var \App\Model\UserService @autowire */
@@ -70,7 +72,7 @@ class UsersPresenter extends BasePresenter
       $to = $user->email;
       $link = $_SERVER['HTTP_HOST'] . $this->link(':Front:Sign:reset', $data);
       $webTitle = $this->getAppParameter('title');
-      $this->mails->sendResetPassword($from, $to, $link, $webTitle);
+      $this->mails->sendNewPassword($from, $to, $link, $webTitle);
 
       $this->successMessage('Byl zaslán e-mail pro reset hesla.');
     }
@@ -99,9 +101,10 @@ class UsersPresenter extends BasePresenter
 
   /**
    * @param \Lawondyss\UserFormFactory $userFormFactory
+   * @param \Lawondyss\Mails $mails
    * @return \Lawondyss\UserForm
    */
-  protected function createComponentUserForm(\Lawondyss\UserFormFactory $userFormFactory)
+  protected function createComponentUserForm(\Lawondyss\UserFormFactory $userFormFactory, \Lawondyss\Mails $mails)
   {
     $control = $userFormFactory->create();
 
@@ -114,7 +117,15 @@ class UsersPresenter extends BasePresenter
       $this->errorMessage($this->defaultErrorMessage, $e);
     };
 
-    $control->onSuccess[] = function() {
+    $control->onSuccess[] = function($form, $values) use ($mails) {
+      if ($values->id === '') {
+        $from = $this->getAppParameter('email.noreply');
+        $to = $values->email;
+        $link = $_SERVER['HTTP_HOST'] . $this->link(':Front:Sign:reset', ['token' => $values->token]);
+        $webTitle = $this->getAppParameter('title');
+        $mails->sendNewAccount($from, $to, $link, $webTitle);
+      }
+
       $this->successMessage('Uloženo.');
       $this->redirect('default');
     };
