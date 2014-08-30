@@ -123,10 +123,6 @@ class AccountForms extends UI\Control
     }
 
     $this->template->setFile(__DIR__ . '/templates' . $file);
-
-    if (isset($this->translator)) {
-      $this->template->setTranslator($this->translator);
-    }
     $this->template->render();
   }
 
