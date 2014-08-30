@@ -18,6 +18,11 @@ abstract class BasePresenter extends \App\Presenters\BasePresenter
       $this->redirect(':Front:Sign:in');
     }
 
+    if (isset($this->user->identity->confirm) && $this->name !== 'Admin:Settings') {
+      $this->flashMessage('Musíte ověřit svůj e-mail. Zde zadejte zaslaný kód.');
+      $this->redirect(':Admin:Settings:confirm');
+    }
+
     $resource = $this->getName();
     if ($resource !== 'Error' && !$this->user->isAllowed($resource)) {
       $userEmail = $this->user->identity->email;

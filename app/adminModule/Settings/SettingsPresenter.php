@@ -21,6 +21,22 @@ class SettingsPresenter extends BasePresenter
   }
 
 
+  public function actionConfirm($code)
+  {
+    if (isset($code)) {
+      if ($code == $this->user->identity->confirm) {
+        $this->successMessage('Účet potvrzen. Vítejte.');
+        $this->redirect('Home:');
+      }
+      else {
+        $msg = sprintf('Kód "%s" uživatele "%s" v URL pro ověření je chybný.', $code, $this->user->identity->email);
+        $e = new \ErrorException($msg);
+        $this->errorMessage('Adresa pro ověření je chybná. Zadejté kód z e-mailu.', $e);
+      }
+    }
+  }
+
+
   /**
    * @param \Lawondyss\AccountFormsFactory $accountFormsFactory
    * @param \App\Model\UserService $userService
@@ -68,6 +84,34 @@ class SettingsPresenter extends BasePresenter
 
     $control->onException[] = function($e) {
       $this->errorMessage('Něco je špatně. Zkuste to později, snad to bude lepší.', $e);
+    };
+
+    return $control;
+  }
+
+
+  /**
+   * @param \Lawondyss\AccountFormsFactory $accountFormsFactory
+   * @param \App\Model\UserService $userService
+   * @return \Lawondyss\AccountForms
+   */
+  protected function createComponentConfirmAccountForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
+  {
+    $control = $accountFormsFactory->create();
+    $control->setType($control::TYPE_CONFIRM_ACCOUNT)
+      ->setTranslator($this->translator)
+      ->setUserService($userService)
+      ->setUser($this->user);
+
+    $control->onSuccess[] = function() {
+      $this->user->identity->confirm = null;
+      $this->successMessage('Účet povrzen.');
+      $this->redirect('Home:default');
+    };
+
+    $control->onException[] = function($e) {
+      $this->errorMessage($this->defaultErrorMessage, $e);
+      $this->redirect('this');
     };
 
     return $control;
