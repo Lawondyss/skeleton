@@ -38,8 +38,9 @@ class SignPresenter extends BasePresenter
   protected function createComponentSignInForm(\Lawondyss\AccountFormsFactory $accountFormsFactory)
   {
     $control = $accountFormsFactory->create();
-    $control->setTranslator($this->translator)
-      ->setType($control::SIGN_IN);
+    $control->setType($control::TYPE_SIGN_IN)
+      ->setTranslator($this->translator)
+      ->setUser($this->user);
 
     $control->onSuccess[] = function() {
       $this->redirect(':Admin:Home:');
@@ -57,8 +58,8 @@ class SignPresenter extends BasePresenter
   protected function createComponentRegisterForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
   {
     $control = $accountFormsFactory->create();
-    $control->setTranslator($this->translator)
-      ->setType($control::REGISTER)
+    $control->setType($control::TYPE_SIGN_UP)
+      ->setTranslator($this->translator)
       ->setUserService($userService);
 
     $control->onException[] = function($e) {
@@ -78,15 +79,15 @@ class SignPresenter extends BasePresenter
   protected function createComponentForgetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService, \Lawondyss\Mails $mails)
   {
     $control = $accountFormsFactory->create();
-    $control->setTranslator($this->translator)
-      ->setType($control::FORGET)
+    $control->setType($control::TYPE_FORGET_PASSWORD)
+      ->setTranslator($this->translator)
       ->setUserService($userService);
 
     $control->onException[] = function($e) {
       $this->errorMessage($this->defaultErrorMessage, $e);
     };
 
-    $control->onSuccess[] = function(\Nette\Application\UI\Form $form, $values) use ($mails) {
+    $control->onSuccess[] = function($form, $values) use ($mails) {
       $from = $this->getAppParameter('email.noreply');
       $to = $values->email;
       $token = $values->token;
@@ -94,7 +95,7 @@ class SignPresenter extends BasePresenter
       $webTitle = $this->getAppParameter('title');
       $mails->sendResetPassword($from, $to, $link, $webTitle);
 
-      $this->successMessage('Byl odeslán resetovací e-mail.');
+      $this->successMessage('Byl odeslán e-mail pro zadání nového hesla.');
       $this->redirect('this');
     };
 
@@ -110,8 +111,8 @@ class SignPresenter extends BasePresenter
   protected function createComponentResetForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
   {
     $control = $accountFormsFactory->create();
-    $control->setTranslator($this->translator)
-      ->setType($control::RESET)
+    $control->setType($control::TYPE_RESET_PASSWORD)
+      ->setTranslator($this->translator)
       ->setUserService($userService);
 
     $control->onException[] = function($e) {

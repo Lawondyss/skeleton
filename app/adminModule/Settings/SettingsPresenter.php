@@ -29,10 +29,10 @@ class SettingsPresenter extends BasePresenter
   protected function createComponentChangePasswordForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
   {
     $control = $accountFormsFactory->create();
-    $control->setTranslator($this->translator)
+    $control->setType($control::TYPE_CHANGE_PASSWORD)
+      ->setTranslator($this->translator)
       ->setUserService($userService)
-      ->setUser($this->user)
-      ->setType($control::CHANGE);
+      ->setUser($this->user);
 
     $control->onSuccess[] = function() {
       $this->successMessage('Heslo bylo změněno.');
@@ -55,10 +55,10 @@ class SettingsPresenter extends BasePresenter
   protected function createComponentDeleteAccountForm(\Lawondyss\AccountFormsFactory $accountFormsFactory, \App\Model\UserService $userService)
   {
     $control = $accountFormsFactory->create();
-    $control->setTranslator($this->translator)
+    $control->setType($control::TYPE_VERIFY_PASSWORD)
+      ->setTranslator($this->translator)
       ->setUserService($userService)
-      ->setUser($this->user)
-      ->setType($control::VERIFY);
+      ->setUser($this->user);
 
     $control->onSuccess[] = function() use ($userService) {
       $userService->delete($this->user->id);

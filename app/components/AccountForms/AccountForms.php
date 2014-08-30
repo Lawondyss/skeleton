@@ -8,21 +8,40 @@
 namespace Lawondyss;
 
 use Nette\Application\UI;
-use Nette\Security\Passwords;
+use Security\Authenticator;
+use Security\Authorizator;
 
 class AccountForms extends UI\Control
 {
-  const SIGN_IN = 1;
+  /**
+   * Types of forms
+   */
+  const TYPE_SIGN_IN = 1;
 
-  const REGISTER = 2;
+  const TYPE_SIGN_UP = 2;
 
-  const FORGET = 3;
+  const TYPE_FORGET_PASSWORD = 3;
 
-  const RESET = 4;
+  const TYPE_RESET_PASSWORD = 4;
 
-  const CHANGE = 5;
+  const TYPE_CHANGE_PASSWORD = 5;
 
-  const VERIFY = 6;
+  const TYPE_VERIFY_PASSWORD = 6;
+
+  const TYPE_CONFIRM_ACCOUNT = 7;
+
+  /**
+   * Set names of db columns
+   */
+  const COLUMN_EMAIL = 'email';
+
+  const COLUMN_PASSWORD = 'password';
+
+  const COLUMN_ROLE = 'role';
+
+  const COLUMN_TOKEN = 'token';
+
+  const COLUMN_CONFIRM = 'confirm';
 
 
   /** @var array */
@@ -47,7 +66,7 @@ class AccountForms extends UI\Control
 
   /**
    * @param \Nette\Localization\ITranslator $translator
-   * @return $this
+   * @return self
    */
   public function setTranslator(\Nette\Localization\ITranslator $translator)
   {
@@ -58,7 +77,7 @@ class AccountForms extends UI\Control
 
   /**
    * @param \App\Model\Service $userService
-   * @return $this
+   * @return self
    */
   public function setUserService(\App\Model\Service $userService)
   {
@@ -69,7 +88,7 @@ class AccountForms extends UI\Control
 
   /**
    * @param \Nette\Security\User $user
-   * @return $this
+   * @return self
    */
   public function setUser(\Nette\Security\User $user)
   {
@@ -80,7 +99,7 @@ class AccountForms extends UI\Control
 
   /**
    * @param string $type
-   * @return $this
+   * @return self
    */
   public function setType($type)
   {
@@ -92,12 +111,13 @@ class AccountForms extends UI\Control
   public function render()
   {
     switch ($this->type) {
-      case self::SIGN_IN:
-      case self::REGISTER:
-      case self::FORGET:
-      case self::RESET:
-      case self::CHANGE:
-      case self::VERIFY:
+      case self::TYPE_SIGN_IN:
+      case self::TYPE_SIGN_UP:
+      case self::TYPE_FORGET_PASSWORD:
+      case self::TYPE_RESET_PASSWORD:
+      case self::TYPE_CHANGE_PASSWORD:
+      case self::TYPE_VERIFY_PASSWORD:
+      case self::TYPE_CONFIRM_ACCOUNT:
       default:
         $file = '/template.latte';
     }
@@ -119,34 +139,34 @@ class AccountForms extends UI\Control
   {
     $form = new UI\Form;
 
-    if (isset($this->translator)) {
-      $form->setTranslator($this->translator);
-    }
-
     switch ($this->type) {
-      case self::SIGN_IN:
+      case self::TYPE_SIGN_IN:
         $this->setupSignInFields($form);
         $callback = $this->processingSignIn;
         break;
-      case self::REGISTER:
-        $this->setupRegisterFields($form);
-        $callback = $this->processingRegister;
+      case self::TYPE_SIGN_UP:
+        $this->setupSignUpFields($form);
+        $callback = $this->processingSignUp;
         break;
-      case self::FORGET:
-        $this->setupForgetFields($form);
-        $callback = $this->processingForget;
+      case self::TYPE_FORGET_PASSWORD:
+        $this->setupForgetPasswordFields($form);
+        $callback = $this->processingForgetPassword;
         break;
-      case self::RESET:
-        $this->setupResetFields($form);
-        $callback = $this->processingReset;
+      case self::TYPE_RESET_PASSWORD:
+        $this->setupResetPasswordFields($form);
+        $callback = $this->processingResetPassword;
         break;
-      case self::CHANGE:
-        $this->setupChangeFields($form);
-        $callback = $this->processingChange;
+      case self::TYPE_CHANGE_PASSWORD:
+        $this->setupChangePasswordFields($form);
+        $callback = $this->processingChangePassword;
         break;
-      case self::VERIFY:
-        $this->setupVerifyFields($form);
-        $callback = $this->processingVerify;
+      case self::TYPE_VERIFY_PASSWORD:
+        $this->setupVerifyPasswordFields($form);
+        $callback = $this->processingVerifyPassword;
+        break;
+      case self::TYPE_CONFIRM_ACCOUNT:
+        $this->setupConfirmAccountFields($form);
+        $callback = $this->processingConfirmAccount;
         break;
       default:
         $msg = isset($this->renderType) ? 'Render type is wrong.' : 'Render type not set';
@@ -169,16 +189,14 @@ class AccountForms extends UI\Control
       ->setRequired()
       ->addRule($form::EMAIL)
       ->getControlPrototype()
-        ->autofocus(true);
+        ->autofocus = true;
 
     $form->addPassword('password', 'Heslo')
       ->setRequired();
 
     $form->addCheckbox('remember', 'Pamatovat si mě');
 
-    $form->addSubmit('send', 'Přihlásit')
-      ->getControlPrototype()
-        ->addClass('btn-primary');
+    $form->addSubmit('send', 'Přihlásit');
   }
 
 
@@ -189,14 +207,14 @@ class AccountForms extends UI\Control
   public function processingSignIn(UI\Form $form, $values)
   {
     if ($values->remember) {
-      $this->presenter->user->setExpiration('14 days', false);
+      $this->user->setExpiration('14 days', false);
     }
     else {
-      $this->presenter->user->setExpiration('20 minutes', true);
+      $this->user->setExpiration('20 minutes', true);
     }
 
     try {
-      $this->presenter->user->login($values->email, $values->password);
+      $this->user->login($values->email, $values->password);
       $this->onSuccess($form, $values);
     }
     catch (\Nette\Security\AuthenticationException $e) {
@@ -208,14 +226,14 @@ class AccountForms extends UI\Control
   /**
    * @param UI\Form $form
    */
-  private function setupRegisterFields(UI\Form $form)
+  private function setupSignUpFields(UI\Form $form)
   {
     $form->addText('email', 'E-mail')
       ->setType('email')
       ->setRequired()
       ->addRule($form::EMAIL)
       ->getControlPrototype()
-        ->autofocus(true);
+        ->autofocus = true;
 
     $form->addPassword('password', 'Heslo')
       ->setRequired()
@@ -226,9 +244,7 @@ class AccountForms extends UI\Control
       ->setRequired()
       ->addRule($form::EQUAL, 'Hesla se musí shodovat.', $form['password']);
 
-    $form->addSubmit('send', 'Registrovat')
-      ->getControlPrototype()
-        ->addClass('btn-primary');
+    $form->addSubmit('send', 'Registrovat');
   }
 
 
@@ -237,18 +253,21 @@ class AccountForms extends UI\Control
    * @param $values
    * @throws \PDOException
    */
-  public function processingRegister(UI\Form $form, $values)
+  public function processingSignUp(UI\Form $form, $values)
   {
     try {
-      $values->role = \App\Model\UserService::ROLE_USER;
-      $values->password = Passwords::hash($values->password);
-      $this->userService->insert($values);
+      $data = [
+        self::COLUMN_EMAIL => $values->email,
+        self::COLUMN_PASSWORD => Authenticator::hashPassword($values->password),
+        self::COLUMN_ROLE => Authorizator::USER,
+      ];
+      $this->userService->insert($data);
 
       $this->onSuccess($form, $values);
     }
     catch (\PDOException $e) {
       if ($e->errorInfo[1] == 1062) {
-        $form['email']->addError('Tento e-mail je již zaregistrován.');
+        $form->addError('Tento e-mail je již zaregistrován.');
       }
       else {
         $this->onException($e, $form);
@@ -260,17 +279,16 @@ class AccountForms extends UI\Control
   /**
    * @param UI\Form $form
    */
-  private function setupForgetFields(UI\Form $form)
+  private function setupForgetPasswordFields(UI\Form $form)
   {
     $form->addText('email', 'Váš přihlašovací e-mail')
+      ->setType('email')
       ->setRequired()
       ->setOption('description', 'Na e-mail bude odeslán odkaz pro reset hesla.')
       ->getControlPrototype()
         ->autofocus = true;
 
-    $form->addSubmit('send', 'Zaslat')
-      ->getControlPrototype()
-        ->addClass('btn-primary');
+    $form->addSubmit('send', 'Odeslat');
   }
 
 
@@ -279,7 +297,7 @@ class AccountForms extends UI\Control
    * @param $values
    * @throws \ErrorException
    */
-  public function processingForget(UI\Form $form, $values)
+  public function processingForgetPassword(UI\Form $form, $values)
   {
     try {
       $user = $this->userService->findByEmail($values->email);
@@ -288,7 +306,10 @@ class AccountForms extends UI\Control
         return;
       }
 
-      $user->update(['token' => \Security\Authenticator::generateToken()]);
+      $data = [
+        self::COLUMN_TOKEN => Authenticator::generateToken(),
+      ];
+      $user->update($data);
       $values->token = $user->token;
 
       $this->onSuccess($form, $values);
@@ -302,7 +323,7 @@ class AccountForms extends UI\Control
   /**
    * @param UI\Form $form
    */
-  private function setupResetFields(UI\Form $form)
+  private function setupResetPasswordFields(UI\Form $form)
   {
     $form->addPassword('password', 'Heslo')
       ->setRequired()
@@ -317,9 +338,7 @@ class AccountForms extends UI\Control
     $token = $this->presenter->getParameter('token');
     $form->addHidden('token', $token);
 
-    $form->addSubmit('send', 'Uložit')
-      ->getControlPrototype()
-        ->addClass('btn-primary');
+    $form->addSubmit('send', 'Uložit');
   }
 
 
@@ -328,7 +347,7 @@ class AccountForms extends UI\Control
    * @param $values
    * @throws \ErrorException
    */
-  public function processingReset(UI\Form $form, $values)
+  public function processingResetPassword(UI\Form $form, $values)
   {
     try {
       if (!isset($values->token)) {
@@ -342,8 +361,8 @@ class AccountForms extends UI\Control
       }
 
       $data = [
-        'password' => Passwords::hash($values->password),
-        'token' => null,
+        self::COLUMN_PASSWORD => Authenticator::hashPassword($values->password),
+        self::COLUMN_TOKEN => null,
       ];
       $user->update($data);
 
@@ -361,7 +380,7 @@ class AccountForms extends UI\Control
   /**
    * @param UI\Form $form
    */
-  private function setupChangeFields(UI\Form $form)
+  private function setupChangePasswordFields(UI\Form $form)
   {
     $form->addPassword('oldPassword', 'Původní heslo')
       ->setRequired();
@@ -374,9 +393,7 @@ class AccountForms extends UI\Control
       ->setRequired()
       ->addRule($form::EQUAL, 'Nová hesla se musí shodovat.', $form['newPassword']);
 
-    $form->addSubmit('send', 'Změnit')
-      ->getControlPrototype()
-        ->addClass('btn-primary');
+    $form->addSubmit('send', 'Uložit');
   }
 
 
@@ -384,19 +401,23 @@ class AccountForms extends UI\Control
    * @param UI\Form $form
    * @param $values
    */
-  public function processingChange(UI\Form $form, $values)
+  public function processingChangePassword(UI\Form $form, $values)
   {
     try {
       $user = $this->userService->get($this->user->id);
-      if (!Passwords::verify($values->oldPassword, $user->password)) {
-        $form->addError('Chybné heslo.');
-      }
-      else {
-        $password = Passwords::hash($values->newPassword);
-        $user->update(['password' => $password]);
 
-        $this->onSuccess($form, $values);
+      $verify = Authenticator::verifyPassword($values->oldPassword, $user->{self::COLUMN_PASSWORD});
+      if (!$verify) {
+        $form->addError('Chybné heslo.');
+        return;
       }
+
+      $data = [
+        self::COLUMN_PASSWORD => Authenticator::hashPassword($values->newPassword),
+      ];
+      $user->update($data);
+
+      $this->onSuccess($form, $values);
     }
     catch (\PDOException $e) {
       $this->onException($e, $form);
@@ -407,14 +428,12 @@ class AccountForms extends UI\Control
   /**
    * @param UI\Form $form
    */
-  private function setupVerifyFields(UI\Form $form)
+  private function setupVerifyPasswordFields(UI\Form $form)
   {
     $form->addPassword('password', 'Heslo')
       ->setRequired();
 
-    $form->addSubmit('send', 'Zrušit')
-      ->getControlPrototype()
-        ->addClass('btn-primary');
+    $form->addSubmit('send', 'Odeslat');
   }
 
 
@@ -422,16 +441,59 @@ class AccountForms extends UI\Control
    * @param UI\Form $form
    * @param $values
    */
-  public function processingVerify(UI\Form $form, $values)
+  public function processingVerifyPassword(UI\Form $form, $values)
   {
     try {
       $user = $this->userService->get($this->user->id);
-      if (!Passwords::verify($values->password, $user->password)) {
+
+      $verify = Authenticator::verifyPassword($values->password, $user->{self::COLUMN_PASSWORD});
+      if (!$verify) {
         $form->addError('Chybné heslo.');
+        return;
       }
-      else {
-        $form->onSuccess($form, $values);
+
+      $form->onSuccess($form, $values);
+    }
+    catch (\PDOException $e) {
+      $this->onException($e, $form);
+    }
+  }
+
+
+  /**
+   * @param UI\Form $form
+   */
+  private function setupConfirmAccountFields(UI\Form $form)
+  {
+    $form->addText('code', 'Ověřovací kód')
+      ->setRequired()
+      ->getControlPrototype()
+        ->autofocus = true;
+
+    $form->addSubmit('send', 'Odeslat');
+  }
+
+
+  /**
+   * @param UI\Form $form
+   * @param $values
+   */
+  public function processingConfirmAccount(UI\Form $form, $values)
+  {
+    try {
+      $user = $this->userService->get($this->user->id);
+
+      if ($values->code !== $user->{self::COLUMN_CONFIRM}) {
+        $form->addError('Ověřovací kód je chybný.');
+        return;
       }
+
+      $data = [
+        self::COLUMN_CONFIRM => null,
+      ];
+      $user->update($data);
+
+      $this->onSuccess($form, $values);
     }
     catch (\PDOException $e) {
       $this->onException($e, $form);
