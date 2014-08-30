@@ -260,6 +260,7 @@ class AccountForms extends UI\Control
         self::COLUMN_EMAIL => $values->email,
         self::COLUMN_PASSWORD => Authenticator::hashPassword($values->password),
         self::COLUMN_ROLE => Authorizator::USER,
+        self::COLUMN_CONFIRM => Authenticator::generateConfirmToken(),
       ];
       $this->userService->insert($data);
 

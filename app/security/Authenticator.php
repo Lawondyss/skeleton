@@ -95,4 +95,13 @@ class Authenticator extends \Nette\Object implements NS\IAuthenticator
     $validity = $expireTime < time();
     return $validity;
   }
+
+
+  /**
+   * @return string
+   */
+  public static function generateConfirmToken()
+  {
+    return self::generateToken();
+  }
 }
