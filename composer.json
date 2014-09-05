@@ -1,7 +1,17 @@
 {
+  "name": "lawondyss/skeleton",
+  "description": "Skeleton for application on Nette framework.",
+  "type": "project",
+  "license": ["unlicense"],
+  "authors": [
+    {
+      "name": "Ladislav Vondráček",
+      "email": "lad.von@gmail.com"
+    }
+  ],
   "require": {
     "php": ">= 5.3.7",
-    "nette/nette": "~2.2.2",
+    "nette/nette": "~2.2.3",
     "janmarek/webloader": "dev-master",
     "kdyby/autowired": "1.0.*@dev",
     "jandrabek/nette-mailpanel": "dev-master"
