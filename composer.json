@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "php": ">= 5.3.7",
+    "php": ">= 5.4",
     "nette/nette": "~2.2.3",
     "janmarek/webloader": "dev-master",
     "kdyby/autowired": "1.0.*@dev",
