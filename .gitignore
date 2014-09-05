@@ -9,6 +9,4 @@ webtemp/
 !.gitignore
 !.htaccess
 !web.config
-app/config/config.local.neon
-app/config/dev
 composer.lock

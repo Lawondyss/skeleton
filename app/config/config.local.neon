@@ -1,0 +1,20 @@
+parameters:
+  database:
+    host: localhost
+    database: skeleton
+    user: root
+    password:
+    profiler: TRUE
+
+
+nette:
+  session:
+    savePath: %appDir%/../temp/sessions
+
+  debugger:
+    bar:
+      - JanDrabek\MailPanel\MailPanel
+
+
+services:
+    nette.mailer: JanDrabek\MailPanel\SessionMailer
