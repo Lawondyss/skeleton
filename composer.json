@@ -3,6 +3,7 @@
   "description": "Skeleton for application on Nette framework.",
   "type": "project",
   "license": ["unlicense"],
+  "version": "1.0",
   "authors": [
     {
       "name": "Ladislav Vondráček",
