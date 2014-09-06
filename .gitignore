@@ -2,7 +2,8 @@ log/*
 temp/*
 vendor/*
 !vendor/others
-webtemp/
+www/webtemp/*
+!www/webtemp/.gitinit
 
 .DS_Store
 .idea
