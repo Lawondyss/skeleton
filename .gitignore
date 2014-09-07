@@ -5,8 +5,6 @@ vendor/*
 www/webtemp/*
 !www/webtemp/.gitinit
 
-.DS_Store
-.idea
 !.gitignore
 !.htaccess
 !web.config
