@@ -117,4 +117,68 @@ abstract class BaseService extends \Nette\Object implements Service
     $id = $result->getPrimary();
     return $id;
   }
+
+
+  /**
+   * @param \Traversable|array $data
+   * @param int $id
+   * @return int Number of affected rows.
+   */
+  public function update($data, $id)
+  {
+    $affectedRows = $this->getTable()->wherePrimary($id)->update($data);
+    return $affectedRows;
+  }
+
+
+  /**
+   * @param \Traversable|array $data
+   * @param $conditions
+   * @return int Number of affected rows.
+   */
+  public function updateBy($data, $conditions)
+  {
+    $affectedRows = $this->getTable()->where($conditions)->update($data);
+    return $affectedRows;
+  }
+
+
+  /**
+   * @param int $id
+   * @return int Number of affected rows.
+   */
+  public function delete($id)
+  {
+    $affectedRows = $this->getTable()->wherePrimary($id)->delete();
+    return $affectedRows;
+  }
+
+
+  /**
+   * @param $conditions
+   * @return int Number of affected rows.
+   */
+  public function deleteBy($conditions)
+  {
+    $affectedRows = $this->getTable()->where($conditions)->delete();
+    return $affectedRows;
+  }
+
+
+  public function begin()
+  {
+    $this->db->beginTransaction();
+  }
+
+
+  public function commit()
+  {
+    $this->db->commit();
+  }
+
+
+  public function rollback()
+  {
+    $this->db->rollBack();
+  }
 }

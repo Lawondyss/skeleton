@@ -20,4 +20,13 @@ interface Service
   public function findBy(array $conditions);
 
   public function insert($data);
+
+  public function update($data, $id);
+
+  public function updateBy($data, $conditions);
+
+  public function delete($id);
+
+  public function deleteBy($conditions);
+
 }
