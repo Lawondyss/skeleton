@@ -65,11 +65,11 @@ abstract class BaseService extends \Nette\Object implements Service
 
 
   /**
-   * @return \Nette\Database\Table\Selection
+   * @return array|IRow[]
    */
   public function findAll()
   {
-    $result = $this->getTable();
+    $result = $this->getTable()->fetchAll();
     return $result;
   }
 
@@ -80,18 +80,18 @@ abstract class BaseService extends \Nette\Object implements Service
    */
   public function findBy(array $conditions)
   {
-    $result = $this->findAll()->where($conditions);
+    $result = $this->getTable()->where($conditions)->fetchAll();
     return $result;
   }
 
 
   /**
-   * @param int $id
+   * @param $id
    * @return \Nette\Database\Table\IRow
    */
   public function get($id)
   {
-    $result = $this->findAll()->get($id);
+    $result = $this->getTable()->get($id);
     return $result;
   }
 
@@ -102,13 +102,13 @@ abstract class BaseService extends \Nette\Object implements Service
    */
   public function getBy(array $conditions)
   {
-    $result = $this->findAll()->where($conditions)->fetch();
+    $result = $this->getTable()->where($conditions)->fetch();
     return $result;
   }
 
 
   /**
-   * @param array|\Traversable|Selection array($column => $value)|\Traversable|Selection for INSERT ... SELECT
+   * @param \Traversable|\Nette\Database\Table\Selection|array $data array($column => $value)|Selection for INSERT ... SELECT
    * @return int ID of new record.
    */
   public function insert($data)
