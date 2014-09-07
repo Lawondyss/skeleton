@@ -60,7 +60,7 @@ abstract class BaseService extends \Nette\Object implements Service
       $this->table = $this->db->table($tableName);
     }
 
-    return $this->table;
+    return clone $this->table;
   }
 
 
